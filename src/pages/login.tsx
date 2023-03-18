@@ -16,8 +16,7 @@ const Login: NextPage = ({ providers }: any) => {
   /**
    * This is required due a React hydration error. Specifically, the input element
    * causes the following error:
-   *
-   *     "Expected server HTML to contain a matching <input> in <div>."
+   * - "Expected server HTML to contain a matching <input> in <div>."
    *
    * Source: https://github.com/vercel/next.js/discussions/17443#discussioncomment-637879
    */
