@@ -1,0 +1,14 @@
+export { AggregateBookmarkArgs } from "./AggregateBookmarkArgs";
+export { CreateManyBookmarkArgs } from "./CreateManyBookmarkArgs";
+export { CreateOneBookmarkArgs } from "./CreateOneBookmarkArgs";
+export { DeleteManyBookmarkArgs } from "./DeleteManyBookmarkArgs";
+export { DeleteOneBookmarkArgs } from "./DeleteOneBookmarkArgs";
+export { FindFirstBookmarkArgs } from "./FindFirstBookmarkArgs";
+export { FindFirstBookmarkOrThrowArgs } from "./FindFirstBookmarkOrThrowArgs";
+export { FindManyBookmarkArgs } from "./FindManyBookmarkArgs";
+export { FindUniqueBookmarkArgs } from "./FindUniqueBookmarkArgs";
+export { FindUniqueBookmarkOrThrowArgs } from "./FindUniqueBookmarkOrThrowArgs";
+export { GroupByBookmarkArgs } from "./GroupByBookmarkArgs";
+export { UpdateManyBookmarkArgs } from "./UpdateManyBookmarkArgs";
+export { UpdateOneBookmarkArgs } from "./UpdateOneBookmarkArgs";
+export { UpsertOneBookmarkArgs } from "./UpsertOneBookmarkArgs";
