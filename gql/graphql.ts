@@ -244,6 +244,13 @@ export type AffectedRowsOutput = {
   count: Scalars['Int'];
 };
 
+export type AggregateBookmark = {
+  __typename?: 'AggregateBookmark';
+  _count?: Maybe<BookmarkCountAggregate>;
+  _max?: Maybe<BookmarkMaxAggregate>;
+  _min?: Maybe<BookmarkMinAggregate>;
+};
+
 export type AggregateCollection = {
   __typename?: 'AggregateCollection';
   _count?: Maybe<CollectionCountAggregate>;
@@ -251,27 +258,25 @@ export type AggregateCollection = {
   _min?: Maybe<CollectionMinAggregate>;
 };
 
+export type AggregateTag = {
+  __typename?: 'AggregateTag';
+  _count?: Maybe<TagCountAggregate>;
+  _max?: Maybe<TagMaxAggregate>;
+  _min?: Maybe<TagMinAggregate>;
+};
+
 export type Bookmark = {
   __typename?: 'Bookmark';
-  BookmarkTag: Array<BookmarkTag>;
+  User: User;
   _count?: Maybe<BookmarkCount>;
   collections: Array<Collection>;
   createdAt: Scalars['DateTime'];
   description: Scalars['String'];
   id: Scalars['String'];
+  tags: Array<Tag>;
   title: Scalars['String'];
   url: Scalars['String'];
   userId: Scalars['String'];
-};
-
-
-export type BookmarkBookmarkTagArgs = {
-  cursor?: InputMaybe<BookmarkTagWhereUniqueInput>;
-  distinct?: InputMaybe<Array<BookmarkTagScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<BookmarkTagOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<BookmarkTagWhereInput>;
 };
 
 
@@ -284,11 +289,73 @@ export type BookmarkCollectionsArgs = {
   where?: InputMaybe<CollectionWhereInput>;
 };
 
+
+export type BookmarkTagsArgs = {
+  cursor?: InputMaybe<TagWhereUniqueInput>;
+  distinct?: InputMaybe<Array<TagScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<TagOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<TagWhereInput>;
+};
+
 export type BookmarkCount = {
   __typename?: 'BookmarkCount';
-  BookmarkTag: Scalars['Int'];
   collections: Scalars['Int'];
-  users: Scalars['Int'];
+  tags: Scalars['Int'];
+};
+
+export type BookmarkCountAggregate = {
+  __typename?: 'BookmarkCountAggregate';
+  _all: Scalars['Int'];
+  createdAt: Scalars['Int'];
+  description: Scalars['Int'];
+  id: Scalars['Int'];
+  title: Scalars['Int'];
+  url: Scalars['Int'];
+  userId: Scalars['Int'];
+};
+
+export type BookmarkCountOrderByAggregateInput = {
+  createdAt?: InputMaybe<SortOrder>;
+  description?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  title?: InputMaybe<SortOrder>;
+  url?: InputMaybe<SortOrder>;
+  userId?: InputMaybe<SortOrder>;
+};
+
+export type BookmarkCreateInput = {
+  User: UserCreateNestedOneWithoutBookmarksInput;
+  collections?: InputMaybe<CollectionCreateNestedManyWithoutBookmarksInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  description: Scalars['String'];
+  id?: InputMaybe<Scalars['String']>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutBookmarkInput>;
+  title: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type BookmarkCreateManyInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  description: Scalars['String'];
+  id?: InputMaybe<Scalars['String']>;
+  title: Scalars['String'];
+  url: Scalars['String'];
+  userId: Scalars['String'];
+};
+
+export type BookmarkCreateManyUserInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  description: Scalars['String'];
+  id?: InputMaybe<Scalars['String']>;
+  title: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type BookmarkCreateManyUserInputEnvelope = {
+  data: Array<BookmarkCreateManyUserInput>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type BookmarkCreateNestedManyWithoutCollectionsInput = {
@@ -297,21 +364,17 @@ export type BookmarkCreateNestedManyWithoutCollectionsInput = {
   create?: InputMaybe<Array<BookmarkCreateWithoutCollectionsInput>>;
 };
 
-export type BookmarkCreateNestedManyWithoutUsersInput = {
+export type BookmarkCreateNestedManyWithoutUserInput = {
   connect?: InputMaybe<Array<BookmarkWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<BookmarkCreateOrConnectWithoutUsersInput>>;
-  create?: InputMaybe<Array<BookmarkCreateWithoutUsersInput>>;
+  connectOrCreate?: InputMaybe<Array<BookmarkCreateOrConnectWithoutUserInput>>;
+  create?: InputMaybe<Array<BookmarkCreateWithoutUserInput>>;
+  createMany?: InputMaybe<BookmarkCreateManyUserInputEnvelope>;
 };
 
-export type BookmarkCreateNestedOneWithoutBookmarkTagInput = {
+export type BookmarkCreateNestedOneWithoutTagsInput = {
   connect?: InputMaybe<BookmarkWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<BookmarkCreateOrConnectWithoutBookmarkTagInput>;
-  create?: InputMaybe<BookmarkCreateWithoutBookmarkTagInput>;
-};
-
-export type BookmarkCreateOrConnectWithoutBookmarkTagInput = {
-  create: BookmarkCreateWithoutBookmarkTagInput;
-  where: BookmarkWhereUniqueInput;
+  connectOrCreate?: InputMaybe<BookmarkCreateOrConnectWithoutTagsInput>;
+  create?: InputMaybe<BookmarkCreateWithoutTagsInput>;
 };
 
 export type BookmarkCreateOrConnectWithoutCollectionsInput = {
@@ -319,42 +382,44 @@ export type BookmarkCreateOrConnectWithoutCollectionsInput = {
   where: BookmarkWhereUniqueInput;
 };
 
-export type BookmarkCreateOrConnectWithoutUsersInput = {
-  create: BookmarkCreateWithoutUsersInput;
+export type BookmarkCreateOrConnectWithoutTagsInput = {
+  create: BookmarkCreateWithoutTagsInput;
   where: BookmarkWhereUniqueInput;
 };
 
-export type BookmarkCreateWithoutBookmarkTagInput = {
-  collections?: InputMaybe<CollectionCreateNestedManyWithoutBookmarksInput>;
-  createdAt: Scalars['DateTime'];
-  description: Scalars['String'];
-  id?: InputMaybe<Scalars['String']>;
-  title: Scalars['String'];
-  url: Scalars['String'];
-  userId: Scalars['String'];
-  users?: InputMaybe<UserCreateNestedManyWithoutBookmarksInput>;
+export type BookmarkCreateOrConnectWithoutUserInput = {
+  create: BookmarkCreateWithoutUserInput;
+  where: BookmarkWhereUniqueInput;
 };
 
 export type BookmarkCreateWithoutCollectionsInput = {
-  BookmarkTag?: InputMaybe<BookmarkTagCreateNestedManyWithoutBookmarkInput>;
-  createdAt: Scalars['DateTime'];
+  User: UserCreateNestedOneWithoutBookmarksInput;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
   description: Scalars['String'];
   id?: InputMaybe<Scalars['String']>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutBookmarkInput>;
   title: Scalars['String'];
   url: Scalars['String'];
-  userId: Scalars['String'];
-  users?: InputMaybe<UserCreateNestedManyWithoutBookmarksInput>;
 };
 
-export type BookmarkCreateWithoutUsersInput = {
-  BookmarkTag?: InputMaybe<BookmarkTagCreateNestedManyWithoutBookmarkInput>;
+export type BookmarkCreateWithoutTagsInput = {
+  User: UserCreateNestedOneWithoutBookmarksInput;
   collections?: InputMaybe<CollectionCreateNestedManyWithoutBookmarksInput>;
-  createdAt: Scalars['DateTime'];
+  createdAt?: InputMaybe<Scalars['DateTime']>;
   description: Scalars['String'];
   id?: InputMaybe<Scalars['String']>;
   title: Scalars['String'];
   url: Scalars['String'];
-  userId: Scalars['String'];
+};
+
+export type BookmarkCreateWithoutUserInput = {
+  collections?: InputMaybe<CollectionCreateNestedManyWithoutBookmarksInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  description: Scalars['String'];
+  id?: InputMaybe<Scalars['String']>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutBookmarkInput>;
+  title: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export type BookmarkCustom = {
@@ -368,8 +433,17 @@ export type BookmarkCustom = {
   userId: Scalars['String'];
 };
 
-export type BookmarkFilter = {
-  tag?: InputMaybe<Scalars['String']>;
+export type BookmarkGroupBy = {
+  __typename?: 'BookmarkGroupBy';
+  _count?: Maybe<BookmarkCountAggregate>;
+  _max?: Maybe<BookmarkMaxAggregate>;
+  _min?: Maybe<BookmarkMinAggregate>;
+  createdAt: Scalars['DateTime'];
+  description: Scalars['String'];
+  id: Scalars['String'];
+  title: Scalars['String'];
+  url: Scalars['String'];
+  userId: Scalars['String'];
 };
 
 export type BookmarkListRelationFilter = {
@@ -378,20 +452,70 @@ export type BookmarkListRelationFilter = {
   some?: InputMaybe<BookmarkWhereInput>;
 };
 
-export type BookmarkOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
+export type BookmarkMaxAggregate = {
+  __typename?: 'BookmarkMaxAggregate';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  description?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
 };
 
-export type BookmarkOrderByWithRelationInput = {
-  BookmarkTag?: InputMaybe<BookmarkTagOrderByRelationAggregateInput>;
-  collections?: InputMaybe<CollectionOrderByRelationAggregateInput>;
+export type BookmarkMaxOrderByAggregateInput = {
   createdAt?: InputMaybe<SortOrder>;
   description?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
   title?: InputMaybe<SortOrder>;
   url?: InputMaybe<SortOrder>;
   userId?: InputMaybe<SortOrder>;
-  users?: InputMaybe<UserOrderByRelationAggregateInput>;
+};
+
+export type BookmarkMinAggregate = {
+  __typename?: 'BookmarkMinAggregate';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  description?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
+};
+
+export type BookmarkMinOrderByAggregateInput = {
+  createdAt?: InputMaybe<SortOrder>;
+  description?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  title?: InputMaybe<SortOrder>;
+  url?: InputMaybe<SortOrder>;
+  userId?: InputMaybe<SortOrder>;
+};
+
+export type BookmarkOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
+export type BookmarkOrderByWithAggregationInput = {
+  _count?: InputMaybe<BookmarkCountOrderByAggregateInput>;
+  _max?: InputMaybe<BookmarkMaxOrderByAggregateInput>;
+  _min?: InputMaybe<BookmarkMinOrderByAggregateInput>;
+  createdAt?: InputMaybe<SortOrder>;
+  description?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  title?: InputMaybe<SortOrder>;
+  url?: InputMaybe<SortOrder>;
+  userId?: InputMaybe<SortOrder>;
+};
+
+export type BookmarkOrderByWithRelationInput = {
+  User?: InputMaybe<UserOrderByWithRelationInput>;
+  collections?: InputMaybe<CollectionOrderByRelationAggregateInput>;
+  createdAt?: InputMaybe<SortOrder>;
+  description?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  tags?: InputMaybe<TagOrderByRelationAggregateInput>;
+  title?: InputMaybe<SortOrder>;
+  url?: InputMaybe<SortOrder>;
+  userId?: InputMaybe<SortOrder>;
 };
 
 export type BookmarkRelationFilter = {
@@ -420,269 +544,27 @@ export type BookmarkScalarWhereInput = {
   userId?: InputMaybe<StringFilter>;
 };
 
-export type BookmarkTag = {
-  __typename?: 'BookmarkTag';
-  bookmarkId: Scalars['String'];
-  empty?: Maybe<Scalars['String']>;
-  tagId: Scalars['String'];
-  userId: Scalars['String'];
+export type BookmarkScalarWhereWithAggregatesInput = {
+  AND?: InputMaybe<Array<BookmarkScalarWhereWithAggregatesInput>>;
+  NOT?: InputMaybe<Array<BookmarkScalarWhereWithAggregatesInput>>;
+  OR?: InputMaybe<Array<BookmarkScalarWhereWithAggregatesInput>>;
+  createdAt?: InputMaybe<DateTimeWithAggregatesFilter>;
+  description?: InputMaybe<StringWithAggregatesFilter>;
+  id?: InputMaybe<StringWithAggregatesFilter>;
+  title?: InputMaybe<StringWithAggregatesFilter>;
+  url?: InputMaybe<StringWithAggregatesFilter>;
+  userId?: InputMaybe<StringWithAggregatesFilter>;
 };
 
-export type BookmarkTagBookmarkIdTagIdCompoundUniqueInput = {
-  bookmarkId: Scalars['String'];
-  tagId: Scalars['String'];
-};
-
-export type BookmarkTagCreateManyBookmarkInput = {
-  empty?: InputMaybe<Scalars['String']>;
-  tagId: Scalars['String'];
-  userId: Scalars['String'];
-};
-
-export type BookmarkTagCreateManyBookmarkInputEnvelope = {
-  data: Array<BookmarkTagCreateManyBookmarkInput>;
-  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
-};
-
-export type BookmarkTagCreateManyUserInput = {
-  bookmarkId: Scalars['String'];
-  empty?: InputMaybe<Scalars['String']>;
-  tagId: Scalars['String'];
-};
-
-export type BookmarkTagCreateManyUserInputEnvelope = {
-  data: Array<BookmarkTagCreateManyUserInput>;
-  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
-};
-
-export type BookmarkTagCreateManyUserTagInput = {
-  bookmarkId: Scalars['String'];
-  empty?: InputMaybe<Scalars['String']>;
-};
-
-export type BookmarkTagCreateManyUserTagInputEnvelope = {
-  data: Array<BookmarkTagCreateManyUserTagInput>;
-  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
-};
-
-export type BookmarkTagCreateNestedManyWithoutBookmarkInput = {
-  connect?: InputMaybe<Array<BookmarkTagWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<BookmarkTagCreateOrConnectWithoutBookmarkInput>>;
-  create?: InputMaybe<Array<BookmarkTagCreateWithoutBookmarkInput>>;
-  createMany?: InputMaybe<BookmarkTagCreateManyBookmarkInputEnvelope>;
-};
-
-export type BookmarkTagCreateNestedManyWithoutUserInput = {
-  connect?: InputMaybe<Array<BookmarkTagWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<BookmarkTagCreateOrConnectWithoutUserInput>>;
-  create?: InputMaybe<Array<BookmarkTagCreateWithoutUserInput>>;
-  createMany?: InputMaybe<BookmarkTagCreateManyUserInputEnvelope>;
-};
-
-export type BookmarkTagCreateNestedManyWithoutUserTagInput = {
-  connect?: InputMaybe<Array<BookmarkTagWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<BookmarkTagCreateOrConnectWithoutUserTagInput>>;
-  create?: InputMaybe<Array<BookmarkTagCreateWithoutUserTagInput>>;
-  createMany?: InputMaybe<BookmarkTagCreateManyUserTagInputEnvelope>;
-};
-
-export type BookmarkTagCreateOrConnectWithoutBookmarkInput = {
-  create: BookmarkTagCreateWithoutBookmarkInput;
-  where: BookmarkTagWhereUniqueInput;
-};
-
-export type BookmarkTagCreateOrConnectWithoutUserInput = {
-  create: BookmarkTagCreateWithoutUserInput;
-  where: BookmarkTagWhereUniqueInput;
-};
-
-export type BookmarkTagCreateOrConnectWithoutUserTagInput = {
-  create: BookmarkTagCreateWithoutUserTagInput;
-  where: BookmarkTagWhereUniqueInput;
-};
-
-export type BookmarkTagCreateWithoutBookmarkInput = {
-  empty?: InputMaybe<Scalars['String']>;
-  user: UserCreateNestedOneWithoutBookmarkTagInput;
-  userTag: UserTagInternalCreateNestedOneWithoutBookmarkTagInput;
-};
-
-export type BookmarkTagCreateWithoutUserInput = {
-  bookmark: BookmarkCreateNestedOneWithoutBookmarkTagInput;
-  empty?: InputMaybe<Scalars['String']>;
-  userTag: UserTagInternalCreateNestedOneWithoutBookmarkTagInput;
-};
-
-export type BookmarkTagCreateWithoutUserTagInput = {
-  bookmark: BookmarkCreateNestedOneWithoutBookmarkTagInput;
-  empty?: InputMaybe<Scalars['String']>;
-  user: UserCreateNestedOneWithoutBookmarkTagInput;
-};
-
-export type BookmarkTagListRelationFilter = {
-  every?: InputMaybe<BookmarkTagWhereInput>;
-  none?: InputMaybe<BookmarkTagWhereInput>;
-  some?: InputMaybe<BookmarkTagWhereInput>;
-};
-
-export type BookmarkTagOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
-};
-
-export type BookmarkTagOrderByWithRelationInput = {
-  bookmark?: InputMaybe<BookmarkOrderByWithRelationInput>;
-  bookmarkId?: InputMaybe<SortOrder>;
-  empty?: InputMaybe<SortOrder>;
-  tagId?: InputMaybe<SortOrder>;
-  user?: InputMaybe<UserOrderByWithRelationInput>;
-  userId?: InputMaybe<SortOrder>;
-  userTag?: InputMaybe<UserTagInternalOrderByWithRelationInput>;
-};
-
-export enum BookmarkTagScalarFieldEnum {
-  BookmarkId = 'bookmarkId',
-  Empty = 'empty',
-  TagId = 'tagId',
-  UserId = 'userId'
-}
-
-export type BookmarkTagScalarWhereInput = {
-  AND?: InputMaybe<Array<BookmarkTagScalarWhereInput>>;
-  NOT?: InputMaybe<Array<BookmarkTagScalarWhereInput>>;
-  OR?: InputMaybe<Array<BookmarkTagScalarWhereInput>>;
-  bookmarkId?: InputMaybe<StringFilter>;
-  empty?: InputMaybe<StringNullableFilter>;
-  tagId?: InputMaybe<StringFilter>;
-  userId?: InputMaybe<StringFilter>;
-};
-
-export type BookmarkTagUpdateManyMutationInput = {
-  empty?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-};
-
-export type BookmarkTagUpdateManyWithWhereWithoutBookmarkInput = {
-  data: BookmarkTagUpdateManyMutationInput;
-  where: BookmarkTagScalarWhereInput;
-};
-
-export type BookmarkTagUpdateManyWithWhereWithoutUserInput = {
-  data: BookmarkTagUpdateManyMutationInput;
-  where: BookmarkTagScalarWhereInput;
-};
-
-export type BookmarkTagUpdateManyWithWhereWithoutUserTagInput = {
-  data: BookmarkTagUpdateManyMutationInput;
-  where: BookmarkTagScalarWhereInput;
-};
-
-export type BookmarkTagUpdateManyWithoutBookmarkNestedInput = {
-  connect?: InputMaybe<Array<BookmarkTagWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<BookmarkTagCreateOrConnectWithoutBookmarkInput>>;
-  create?: InputMaybe<Array<BookmarkTagCreateWithoutBookmarkInput>>;
-  createMany?: InputMaybe<BookmarkTagCreateManyBookmarkInputEnvelope>;
-  delete?: InputMaybe<Array<BookmarkTagWhereUniqueInput>>;
-  deleteMany?: InputMaybe<Array<BookmarkTagScalarWhereInput>>;
-  disconnect?: InputMaybe<Array<BookmarkTagWhereUniqueInput>>;
-  set?: InputMaybe<Array<BookmarkTagWhereUniqueInput>>;
-  update?: InputMaybe<Array<BookmarkTagUpdateWithWhereUniqueWithoutBookmarkInput>>;
-  updateMany?: InputMaybe<Array<BookmarkTagUpdateManyWithWhereWithoutBookmarkInput>>;
-  upsert?: InputMaybe<Array<BookmarkTagUpsertWithWhereUniqueWithoutBookmarkInput>>;
-};
-
-export type BookmarkTagUpdateManyWithoutUserNestedInput = {
-  connect?: InputMaybe<Array<BookmarkTagWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<BookmarkTagCreateOrConnectWithoutUserInput>>;
-  create?: InputMaybe<Array<BookmarkTagCreateWithoutUserInput>>;
-  createMany?: InputMaybe<BookmarkTagCreateManyUserInputEnvelope>;
-  delete?: InputMaybe<Array<BookmarkTagWhereUniqueInput>>;
-  deleteMany?: InputMaybe<Array<BookmarkTagScalarWhereInput>>;
-  disconnect?: InputMaybe<Array<BookmarkTagWhereUniqueInput>>;
-  set?: InputMaybe<Array<BookmarkTagWhereUniqueInput>>;
-  update?: InputMaybe<Array<BookmarkTagUpdateWithWhereUniqueWithoutUserInput>>;
-  updateMany?: InputMaybe<Array<BookmarkTagUpdateManyWithWhereWithoutUserInput>>;
-  upsert?: InputMaybe<Array<BookmarkTagUpsertWithWhereUniqueWithoutUserInput>>;
-};
-
-export type BookmarkTagUpdateManyWithoutUserTagNestedInput = {
-  connect?: InputMaybe<Array<BookmarkTagWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<BookmarkTagCreateOrConnectWithoutUserTagInput>>;
-  create?: InputMaybe<Array<BookmarkTagCreateWithoutUserTagInput>>;
-  createMany?: InputMaybe<BookmarkTagCreateManyUserTagInputEnvelope>;
-  delete?: InputMaybe<Array<BookmarkTagWhereUniqueInput>>;
-  deleteMany?: InputMaybe<Array<BookmarkTagScalarWhereInput>>;
-  disconnect?: InputMaybe<Array<BookmarkTagWhereUniqueInput>>;
-  set?: InputMaybe<Array<BookmarkTagWhereUniqueInput>>;
-  update?: InputMaybe<Array<BookmarkTagUpdateWithWhereUniqueWithoutUserTagInput>>;
-  updateMany?: InputMaybe<Array<BookmarkTagUpdateManyWithWhereWithoutUserTagInput>>;
-  upsert?: InputMaybe<Array<BookmarkTagUpsertWithWhereUniqueWithoutUserTagInput>>;
-};
-
-export type BookmarkTagUpdateWithWhereUniqueWithoutBookmarkInput = {
-  data: BookmarkTagUpdateWithoutBookmarkInput;
-  where: BookmarkTagWhereUniqueInput;
-};
-
-export type BookmarkTagUpdateWithWhereUniqueWithoutUserInput = {
-  data: BookmarkTagUpdateWithoutUserInput;
-  where: BookmarkTagWhereUniqueInput;
-};
-
-export type BookmarkTagUpdateWithWhereUniqueWithoutUserTagInput = {
-  data: BookmarkTagUpdateWithoutUserTagInput;
-  where: BookmarkTagWhereUniqueInput;
-};
-
-export type BookmarkTagUpdateWithoutBookmarkInput = {
-  empty?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  user?: InputMaybe<UserUpdateOneRequiredWithoutBookmarkTagNestedInput>;
-  userTag?: InputMaybe<UserTagInternalUpdateOneRequiredWithoutBookmarkTagNestedInput>;
-};
-
-export type BookmarkTagUpdateWithoutUserInput = {
-  bookmark?: InputMaybe<BookmarkUpdateOneRequiredWithoutBookmarkTagNestedInput>;
-  empty?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  userTag?: InputMaybe<UserTagInternalUpdateOneRequiredWithoutBookmarkTagNestedInput>;
-};
-
-export type BookmarkTagUpdateWithoutUserTagInput = {
-  bookmark?: InputMaybe<BookmarkUpdateOneRequiredWithoutBookmarkTagNestedInput>;
-  empty?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  user?: InputMaybe<UserUpdateOneRequiredWithoutBookmarkTagNestedInput>;
-};
-
-export type BookmarkTagUpsertWithWhereUniqueWithoutBookmarkInput = {
-  create: BookmarkTagCreateWithoutBookmarkInput;
-  update: BookmarkTagUpdateWithoutBookmarkInput;
-  where: BookmarkTagWhereUniqueInput;
-};
-
-export type BookmarkTagUpsertWithWhereUniqueWithoutUserInput = {
-  create: BookmarkTagCreateWithoutUserInput;
-  update: BookmarkTagUpdateWithoutUserInput;
-  where: BookmarkTagWhereUniqueInput;
-};
-
-export type BookmarkTagUpsertWithWhereUniqueWithoutUserTagInput = {
-  create: BookmarkTagCreateWithoutUserTagInput;
-  update: BookmarkTagUpdateWithoutUserTagInput;
-  where: BookmarkTagWhereUniqueInput;
-};
-
-export type BookmarkTagWhereInput = {
-  AND?: InputMaybe<Array<BookmarkTagWhereInput>>;
-  NOT?: InputMaybe<Array<BookmarkTagWhereInput>>;
-  OR?: InputMaybe<Array<BookmarkTagWhereInput>>;
-  bookmark?: InputMaybe<BookmarkRelationFilter>;
-  bookmarkId?: InputMaybe<StringFilter>;
-  empty?: InputMaybe<StringNullableFilter>;
-  tagId?: InputMaybe<StringFilter>;
-  user?: InputMaybe<UserRelationFilter>;
-  userId?: InputMaybe<StringFilter>;
-  userTag?: InputMaybe<UserTagInternalRelationFilter>;
-};
-
-export type BookmarkTagWhereUniqueInput = {
-  bookmarkId_tagId?: InputMaybe<BookmarkTagBookmarkIdTagIdCompoundUniqueInput>;
+export type BookmarkUpdateInput = {
+  User?: InputMaybe<UserUpdateOneRequiredWithoutBookmarksNestedInput>;
+  collections?: InputMaybe<CollectionUpdateManyWithoutBookmarksNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<StringFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutBookmarkNestedInput>;
+  title?: InputMaybe<StringFieldUpdateOperationsInput>;
+  url?: InputMaybe<StringFieldUpdateOperationsInput>;
 };
 
 export type BookmarkUpdateManyMutationInput = {
@@ -691,7 +573,6 @@ export type BookmarkUpdateManyMutationInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   url?: InputMaybe<StringFieldUpdateOperationsInput>;
-  userId?: InputMaybe<StringFieldUpdateOperationsInput>;
 };
 
 export type BookmarkUpdateManyWithWhereWithoutCollectionsInput = {
@@ -699,7 +580,7 @@ export type BookmarkUpdateManyWithWhereWithoutCollectionsInput = {
   where: BookmarkScalarWhereInput;
 };
 
-export type BookmarkUpdateManyWithWhereWithoutUsersInput = {
+export type BookmarkUpdateManyWithWhereWithoutUserInput = {
   data: BookmarkUpdateManyMutationInput;
   where: BookmarkScalarWhereInput;
 };
@@ -717,25 +598,28 @@ export type BookmarkUpdateManyWithoutCollectionsNestedInput = {
   upsert?: InputMaybe<Array<BookmarkUpsertWithWhereUniqueWithoutCollectionsInput>>;
 };
 
-export type BookmarkUpdateManyWithoutUsersNestedInput = {
+export type BookmarkUpdateManyWithoutUserNestedInput = {
   connect?: InputMaybe<Array<BookmarkWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<BookmarkCreateOrConnectWithoutUsersInput>>;
-  create?: InputMaybe<Array<BookmarkCreateWithoutUsersInput>>;
+  connectOrCreate?: InputMaybe<Array<BookmarkCreateOrConnectWithoutUserInput>>;
+  create?: InputMaybe<Array<BookmarkCreateWithoutUserInput>>;
+  createMany?: InputMaybe<BookmarkCreateManyUserInputEnvelope>;
   delete?: InputMaybe<Array<BookmarkWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<BookmarkScalarWhereInput>>;
   disconnect?: InputMaybe<Array<BookmarkWhereUniqueInput>>;
   set?: InputMaybe<Array<BookmarkWhereUniqueInput>>;
-  update?: InputMaybe<Array<BookmarkUpdateWithWhereUniqueWithoutUsersInput>>;
-  updateMany?: InputMaybe<Array<BookmarkUpdateManyWithWhereWithoutUsersInput>>;
-  upsert?: InputMaybe<Array<BookmarkUpsertWithWhereUniqueWithoutUsersInput>>;
+  update?: InputMaybe<Array<BookmarkUpdateWithWhereUniqueWithoutUserInput>>;
+  updateMany?: InputMaybe<Array<BookmarkUpdateManyWithWhereWithoutUserInput>>;
+  upsert?: InputMaybe<Array<BookmarkUpsertWithWhereUniqueWithoutUserInput>>;
 };
 
-export type BookmarkUpdateOneRequiredWithoutBookmarkTagNestedInput = {
+export type BookmarkUpdateOneWithoutTagsNestedInput = {
   connect?: InputMaybe<BookmarkWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<BookmarkCreateOrConnectWithoutBookmarkTagInput>;
-  create?: InputMaybe<BookmarkCreateWithoutBookmarkTagInput>;
-  update?: InputMaybe<BookmarkUpdateWithoutBookmarkTagInput>;
-  upsert?: InputMaybe<BookmarkUpsertWithoutBookmarkTagInput>;
+  connectOrCreate?: InputMaybe<BookmarkCreateOrConnectWithoutTagsInput>;
+  create?: InputMaybe<BookmarkCreateWithoutTagsInput>;
+  delete?: InputMaybe<Scalars['Boolean']>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+  update?: InputMaybe<BookmarkUpdateWithoutTagsInput>;
+  upsert?: InputMaybe<BookmarkUpsertWithoutTagsInput>;
 };
 
 export type BookmarkUpdateWithWhereUniqueWithoutCollectionsInput = {
@@ -743,42 +627,39 @@ export type BookmarkUpdateWithWhereUniqueWithoutCollectionsInput = {
   where: BookmarkWhereUniqueInput;
 };
 
-export type BookmarkUpdateWithWhereUniqueWithoutUsersInput = {
-  data: BookmarkUpdateWithoutUsersInput;
+export type BookmarkUpdateWithWhereUniqueWithoutUserInput = {
+  data: BookmarkUpdateWithoutUserInput;
   where: BookmarkWhereUniqueInput;
 };
 
-export type BookmarkUpdateWithoutBookmarkTagInput = {
-  collections?: InputMaybe<CollectionUpdateManyWithoutBookmarksNestedInput>;
-  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-  description?: InputMaybe<StringFieldUpdateOperationsInput>;
-  id?: InputMaybe<StringFieldUpdateOperationsInput>;
-  title?: InputMaybe<StringFieldUpdateOperationsInput>;
-  url?: InputMaybe<StringFieldUpdateOperationsInput>;
-  userId?: InputMaybe<StringFieldUpdateOperationsInput>;
-  users?: InputMaybe<UserUpdateManyWithoutBookmarksNestedInput>;
-};
-
 export type BookmarkUpdateWithoutCollectionsInput = {
-  BookmarkTag?: InputMaybe<BookmarkTagUpdateManyWithoutBookmarkNestedInput>;
+  User?: InputMaybe<UserUpdateOneRequiredWithoutBookmarksNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutBookmarkNestedInput>;
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   url?: InputMaybe<StringFieldUpdateOperationsInput>;
-  userId?: InputMaybe<StringFieldUpdateOperationsInput>;
-  users?: InputMaybe<UserUpdateManyWithoutBookmarksNestedInput>;
 };
 
-export type BookmarkUpdateWithoutUsersInput = {
-  BookmarkTag?: InputMaybe<BookmarkTagUpdateManyWithoutBookmarkNestedInput>;
+export type BookmarkUpdateWithoutTagsInput = {
+  User?: InputMaybe<UserUpdateOneRequiredWithoutBookmarksNestedInput>;
   collections?: InputMaybe<CollectionUpdateManyWithoutBookmarksNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   url?: InputMaybe<StringFieldUpdateOperationsInput>;
-  userId?: InputMaybe<StringFieldUpdateOperationsInput>;
+};
+
+export type BookmarkUpdateWithoutUserInput = {
+  collections?: InputMaybe<CollectionUpdateManyWithoutBookmarksNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<StringFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutBookmarkNestedInput>;
+  title?: InputMaybe<StringFieldUpdateOperationsInput>;
+  url?: InputMaybe<StringFieldUpdateOperationsInput>;
 };
 
 export type BookmarkUpsertWithWhereUniqueWithoutCollectionsInput = {
@@ -787,30 +668,30 @@ export type BookmarkUpsertWithWhereUniqueWithoutCollectionsInput = {
   where: BookmarkWhereUniqueInput;
 };
 
-export type BookmarkUpsertWithWhereUniqueWithoutUsersInput = {
-  create: BookmarkCreateWithoutUsersInput;
-  update: BookmarkUpdateWithoutUsersInput;
+export type BookmarkUpsertWithWhereUniqueWithoutUserInput = {
+  create: BookmarkCreateWithoutUserInput;
+  update: BookmarkUpdateWithoutUserInput;
   where: BookmarkWhereUniqueInput;
 };
 
-export type BookmarkUpsertWithoutBookmarkTagInput = {
-  create: BookmarkCreateWithoutBookmarkTagInput;
-  update: BookmarkUpdateWithoutBookmarkTagInput;
+export type BookmarkUpsertWithoutTagsInput = {
+  create: BookmarkCreateWithoutTagsInput;
+  update: BookmarkUpdateWithoutTagsInput;
 };
 
 export type BookmarkWhereInput = {
   AND?: InputMaybe<Array<BookmarkWhereInput>>;
-  BookmarkTag?: InputMaybe<BookmarkTagListRelationFilter>;
   NOT?: InputMaybe<Array<BookmarkWhereInput>>;
   OR?: InputMaybe<Array<BookmarkWhereInput>>;
+  User?: InputMaybe<UserRelationFilter>;
   collections?: InputMaybe<CollectionListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   description?: InputMaybe<StringFilter>;
   id?: InputMaybe<StringFilter>;
+  tags?: InputMaybe<TagListRelationFilter>;
   title?: InputMaybe<StringFilter>;
   url?: InputMaybe<StringFilter>;
   userId?: InputMaybe<StringFilter>;
-  users?: InputMaybe<UserListRelationFilter>;
 };
 
 export type BookmarkWhereUniqueInput = {
@@ -1488,20 +1369,30 @@ export type Mutation = {
   activateAPITokenExternalService: Scalars['Boolean'];
   activateUsernameAndPasswordExternalService: Scalars['Boolean'];
   addBookmarkToCollection: Scalars['Boolean'];
+  createManyBookmark: AffectedRowsOutput;
   createManyCollection: AffectedRowsOutput;
+  createManyTag: AffectedRowsOutput;
+  createOneBookmark: Bookmark;
   createOneCollection: Collection;
+  createOneTag: Tag;
   deactivateExternalService: Scalars['Boolean'];
-  deleteBookmark: Bookmark;
+  deleteManyBookmark: AffectedRowsOutput;
   deleteManyCollection: AffectedRowsOutput;
+  deleteManyTag: AffectedRowsOutput;
+  deleteOneBookmark?: Maybe<Bookmark>;
   deleteOneCollection?: Maybe<Collection>;
-  deleteTag: Scalars['Boolean'];
+  deleteOneTag?: Maybe<Tag>;
   removeBookmarkFromCollection: Scalars['Boolean'];
   shareToExternalService: Scalars['Boolean'];
+  updateManyBookmark: AffectedRowsOutput;
   updateManyCollection: AffectedRowsOutput;
+  updateManyTag: AffectedRowsOutput;
+  updateOneBookmark?: Maybe<Bookmark>;
   updateOneCollection?: Maybe<Collection>;
-  upsertBookmark: Bookmark;
+  updateOneTag?: Maybe<Tag>;
+  upsertOneBookmark: Bookmark;
   upsertOneCollection: Collection;
-  upsertTag: UserTag;
+  upsertOneTag: Tag;
 };
 
 
@@ -1520,9 +1411,26 @@ export type MutationAddBookmarkToCollectionArgs = {
 };
 
 
+export type MutationCreateManyBookmarkArgs = {
+  data: Array<BookmarkCreateManyInput>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+
 export type MutationCreateManyCollectionArgs = {
   data: Array<CollectionCreateManyInput>;
   skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type MutationCreateManyTagArgs = {
+  data: Array<TagCreateManyInput>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type MutationCreateOneBookmarkArgs = {
+  data: BookmarkCreateInput;
 };
 
 
@@ -1531,13 +1439,18 @@ export type MutationCreateOneCollectionArgs = {
 };
 
 
+export type MutationCreateOneTagArgs = {
+  data: TagCreateInput;
+};
+
+
 export type MutationDeactivateExternalServiceArgs = {
   serviceType: ExternalServiceType;
 };
 
 
-export type MutationDeleteBookmarkArgs = {
-  id: Scalars['String'];
+export type MutationDeleteManyBookmarkArgs = {
+  where?: InputMaybe<BookmarkWhereInput>;
 };
 
 
@@ -1546,13 +1459,23 @@ export type MutationDeleteManyCollectionArgs = {
 };
 
 
+export type MutationDeleteManyTagArgs = {
+  where?: InputMaybe<TagWhereInput>;
+};
+
+
+export type MutationDeleteOneBookmarkArgs = {
+  where: BookmarkWhereUniqueInput;
+};
+
+
 export type MutationDeleteOneCollectionArgs = {
   where: CollectionWhereUniqueInput;
 };
 
 
-export type MutationDeleteTagArgs = {
-  id: Scalars['String'];
+export type MutationDeleteOneTagArgs = {
+  where: TagWhereUniqueInput;
 };
 
 
@@ -1566,9 +1489,27 @@ export type MutationShareToExternalServiceArgs = {
 };
 
 
+export type MutationUpdateManyBookmarkArgs = {
+  data: BookmarkUpdateManyMutationInput;
+  where?: InputMaybe<BookmarkWhereInput>;
+};
+
+
 export type MutationUpdateManyCollectionArgs = {
   data: CollectionUpdateManyMutationInput;
   where?: InputMaybe<CollectionWhereInput>;
+};
+
+
+export type MutationUpdateManyTagArgs = {
+  data: TagUpdateManyMutationInput;
+  where?: InputMaybe<TagWhereInput>;
+};
+
+
+export type MutationUpdateOneBookmarkArgs = {
+  data: BookmarkUpdateInput;
+  where: BookmarkWhereUniqueInput;
 };
 
 
@@ -1578,8 +1519,16 @@ export type MutationUpdateOneCollectionArgs = {
 };
 
 
-export type MutationUpsertBookmarkArgs = {
-  upsertBookmarkInput: UpsertBookmarkInput;
+export type MutationUpdateOneTagArgs = {
+  data: TagUpdateInput;
+  where: TagWhereUniqueInput;
+};
+
+
+export type MutationUpsertOneBookmarkArgs = {
+  create: BookmarkCreateInput;
+  update: BookmarkUpdateInput;
+  where: BookmarkWhereUniqueInput;
 };
 
 
@@ -1590,8 +1539,10 @@ export type MutationUpsertOneCollectionArgs = {
 };
 
 
-export type MutationUpsertTagArgs = {
-  upsertTagInput: UpsertTagInput;
+export type MutationUpsertOneTagArgs = {
+  create: TagCreateInput;
+  update: TagUpdateInput;
+  where: TagWhereUniqueInput;
 };
 
 export type NestedBoolFilter = {
@@ -1759,18 +1710,39 @@ export type NullableStringFieldUpdateOperationsInput = {
 
 export type Query = {
   __typename?: 'Query';
+  aggregateBookmark: AggregateBookmark;
   aggregateCollection: AggregateCollection;
-  bookmarks: Array<BookmarkCustom>;
+  aggregateTag: AggregateTag;
+  bookmark?: Maybe<Bookmark>;
+  bookmarks: Array<Bookmark>;
   collection?: Maybe<Collection>;
   collections: Array<Collection>;
   externalServices: Array<ExternalService>;
+  findFirstBookmark?: Maybe<Bookmark>;
+  findFirstBookmarkOrThrow?: Maybe<Bookmark>;
   findFirstCollection?: Maybe<Collection>;
   findFirstCollectionOrThrow?: Maybe<Collection>;
+  findFirstTag?: Maybe<Tag>;
+  findFirstTagOrThrow?: Maybe<Tag>;
+  getBookmark?: Maybe<Bookmark>;
   getCollection?: Maybe<Collection>;
+  getTag?: Maybe<Tag>;
+  groupByBookmark: Array<BookmarkGroupBy>;
   groupByCollection: Array<CollectionGroupBy>;
-  tags: Array<UserTag>;
+  groupByTag: Array<TagGroupBy>;
+  tag?: Maybe<Tag>;
+  tags: Array<Tag>;
   user: User;
   users: Array<User>;
+};
+
+
+export type QueryAggregateBookmarkArgs = {
+  cursor?: InputMaybe<BookmarkWhereUniqueInput>;
+  orderBy?: InputMaybe<Array<BookmarkOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<BookmarkWhereInput>;
 };
 
 
@@ -1783,8 +1755,27 @@ export type QueryAggregateCollectionArgs = {
 };
 
 
+export type QueryAggregateTagArgs = {
+  cursor?: InputMaybe<TagWhereUniqueInput>;
+  orderBy?: InputMaybe<Array<TagOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<TagWhereInput>;
+};
+
+
+export type QueryBookmarkArgs = {
+  where: BookmarkWhereUniqueInput;
+};
+
+
 export type QueryBookmarksArgs = {
-  filter: BookmarkFilter;
+  cursor?: InputMaybe<BookmarkWhereUniqueInput>;
+  distinct?: InputMaybe<Array<BookmarkScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<BookmarkOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<BookmarkWhereInput>;
 };
 
 
@@ -1800,6 +1791,26 @@ export type QueryCollectionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<CollectionWhereInput>;
+};
+
+
+export type QueryFindFirstBookmarkArgs = {
+  cursor?: InputMaybe<BookmarkWhereUniqueInput>;
+  distinct?: InputMaybe<Array<BookmarkScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<BookmarkOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<BookmarkWhereInput>;
+};
+
+
+export type QueryFindFirstBookmarkOrThrowArgs = {
+  cursor?: InputMaybe<BookmarkWhereUniqueInput>;
+  distinct?: InputMaybe<Array<BookmarkScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<BookmarkOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<BookmarkWhereInput>;
 };
 
 
@@ -1823,8 +1834,48 @@ export type QueryFindFirstCollectionOrThrowArgs = {
 };
 
 
+export type QueryFindFirstTagArgs = {
+  cursor?: InputMaybe<TagWhereUniqueInput>;
+  distinct?: InputMaybe<Array<TagScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<TagOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<TagWhereInput>;
+};
+
+
+export type QueryFindFirstTagOrThrowArgs = {
+  cursor?: InputMaybe<TagWhereUniqueInput>;
+  distinct?: InputMaybe<Array<TagScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<TagOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<TagWhereInput>;
+};
+
+
+export type QueryGetBookmarkArgs = {
+  where: BookmarkWhereUniqueInput;
+};
+
+
 export type QueryGetCollectionArgs = {
   where: CollectionWhereUniqueInput;
+};
+
+
+export type QueryGetTagArgs = {
+  where: TagWhereUniqueInput;
+};
+
+
+export type QueryGroupByBookmarkArgs = {
+  by: Array<BookmarkScalarFieldEnum>;
+  having?: InputMaybe<BookmarkScalarWhereWithAggregatesInput>;
+  orderBy?: InputMaybe<Array<BookmarkOrderByWithAggregationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<BookmarkWhereInput>;
 };
 
 
@@ -1835,6 +1886,31 @@ export type QueryGroupByCollectionArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<CollectionWhereInput>;
+};
+
+
+export type QueryGroupByTagArgs = {
+  by: Array<TagScalarFieldEnum>;
+  having?: InputMaybe<TagScalarWhereWithAggregatesInput>;
+  orderBy?: InputMaybe<Array<TagOrderByWithAggregationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<TagWhereInput>;
+};
+
+
+export type QueryTagArgs = {
+  where: TagWhereUniqueInput;
+};
+
+
+export type QueryTagsArgs = {
+  cursor?: InputMaybe<TagWhereUniqueInput>;
+  distinct?: InputMaybe<Array<TagScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<TagOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<TagWhereInput>;
 };
 
 export type RemoveBookmarkFromCollectionInput = {
@@ -2050,78 +2126,316 @@ export type StringWithAggregatesFilter = {
 
 export type Tag = {
   __typename?: 'Tag';
-  UserTag: Array<UserTagInternal>;
-  _count?: Maybe<TagCount>;
+  Bookmark?: Maybe<Bookmark>;
+  User: User;
+  bookmarkId?: Maybe<Scalars['String']>;
   id: Scalars['String'];
+  tagColor: Scalars['String'];
+  userId: Scalars['String'];
   value: Scalars['String'];
 };
 
-
-export type TagUserTagArgs = {
-  cursor?: InputMaybe<UserTagInternalWhereUniqueInput>;
-  distinct?: InputMaybe<Array<UserTagInternalScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<UserTagInternalOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<UserTagInternalWhereInput>;
+export type TagCountAggregate = {
+  __typename?: 'TagCountAggregate';
+  _all: Scalars['Int'];
+  bookmarkId: Scalars['Int'];
+  id: Scalars['Int'];
+  tagColor: Scalars['Int'];
+  userId: Scalars['Int'];
+  value: Scalars['Int'];
 };
 
-export type TagCount = {
-  __typename?: 'TagCount';
-  UserTag: Scalars['Int'];
-};
-
-export type TagCreateNestedOneWithoutUserTagInput = {
-  connect?: InputMaybe<TagWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<TagCreateOrConnectWithoutUserTagInput>;
-  create?: InputMaybe<TagCreateWithoutUserTagInput>;
-};
-
-export type TagCreateOrConnectWithoutUserTagInput = {
-  create: TagCreateWithoutUserTagInput;
-  where: TagWhereUniqueInput;
-};
-
-export type TagCreateWithoutUserTagInput = {
-  id?: InputMaybe<Scalars['String']>;
-  value: Scalars['String'];
-};
-
-export type TagOrderByWithRelationInput = {
-  UserTag?: InputMaybe<UserTagInternalOrderByRelationAggregateInput>;
+export type TagCountOrderByAggregateInput = {
+  bookmarkId?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
+  tagColor?: InputMaybe<SortOrder>;
+  userId?: InputMaybe<SortOrder>;
   value?: InputMaybe<SortOrder>;
 };
 
-export type TagRelationFilter = {
-  is?: InputMaybe<TagWhereInput>;
-  isNot?: InputMaybe<TagWhereInput>;
+export type TagCreateInput = {
+  Bookmark?: InputMaybe<BookmarkCreateNestedOneWithoutTagsInput>;
+  User: UserCreateNestedOneWithoutTagsInput;
+  id?: InputMaybe<Scalars['String']>;
+  tagColor: Scalars['String'];
+  value: Scalars['String'];
 };
 
-export type TagUpdateOneRequiredWithoutUserTagNestedInput = {
-  connect?: InputMaybe<TagWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<TagCreateOrConnectWithoutUserTagInput>;
-  create?: InputMaybe<TagCreateWithoutUserTagInput>;
-  update?: InputMaybe<TagUpdateWithoutUserTagInput>;
-  upsert?: InputMaybe<TagUpsertWithoutUserTagInput>;
+export type TagCreateManyBookmarkInput = {
+  id?: InputMaybe<Scalars['String']>;
+  tagColor: Scalars['String'];
+  userId: Scalars['String'];
+  value: Scalars['String'];
 };
 
-export type TagUpdateWithoutUserTagInput = {
+export type TagCreateManyBookmarkInputEnvelope = {
+  data: Array<TagCreateManyBookmarkInput>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type TagCreateManyInput = {
+  bookmarkId?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  tagColor: Scalars['String'];
+  userId: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type TagCreateManyUserInput = {
+  bookmarkId?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  tagColor: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type TagCreateManyUserInputEnvelope = {
+  data: Array<TagCreateManyUserInput>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type TagCreateNestedManyWithoutBookmarkInput = {
+  connect?: InputMaybe<Array<TagWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<TagCreateOrConnectWithoutBookmarkInput>>;
+  create?: InputMaybe<Array<TagCreateWithoutBookmarkInput>>;
+  createMany?: InputMaybe<TagCreateManyBookmarkInputEnvelope>;
+};
+
+export type TagCreateNestedManyWithoutUserInput = {
+  connect?: InputMaybe<Array<TagWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<TagCreateOrConnectWithoutUserInput>>;
+  create?: InputMaybe<Array<TagCreateWithoutUserInput>>;
+  createMany?: InputMaybe<TagCreateManyUserInputEnvelope>;
+};
+
+export type TagCreateOrConnectWithoutBookmarkInput = {
+  create: TagCreateWithoutBookmarkInput;
+  where: TagWhereUniqueInput;
+};
+
+export type TagCreateOrConnectWithoutUserInput = {
+  create: TagCreateWithoutUserInput;
+  where: TagWhereUniqueInput;
+};
+
+export type TagCreateWithoutBookmarkInput = {
+  User: UserCreateNestedOneWithoutTagsInput;
+  id?: InputMaybe<Scalars['String']>;
+  tagColor: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type TagCreateWithoutUserInput = {
+  Bookmark?: InputMaybe<BookmarkCreateNestedOneWithoutTagsInput>;
+  id?: InputMaybe<Scalars['String']>;
+  tagColor: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type TagGroupBy = {
+  __typename?: 'TagGroupBy';
+  _count?: Maybe<TagCountAggregate>;
+  _max?: Maybe<TagMaxAggregate>;
+  _min?: Maybe<TagMinAggregate>;
+  bookmarkId?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  tagColor: Scalars['String'];
+  userId: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type TagListRelationFilter = {
+  every?: InputMaybe<TagWhereInput>;
+  none?: InputMaybe<TagWhereInput>;
+  some?: InputMaybe<TagWhereInput>;
+};
+
+export type TagMaxAggregate = {
+  __typename?: 'TagMaxAggregate';
+  bookmarkId?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  tagColor?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+export type TagMaxOrderByAggregateInput = {
+  bookmarkId?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  tagColor?: InputMaybe<SortOrder>;
+  userId?: InputMaybe<SortOrder>;
+  value?: InputMaybe<SortOrder>;
+};
+
+export type TagMinAggregate = {
+  __typename?: 'TagMinAggregate';
+  bookmarkId?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  tagColor?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+export type TagMinOrderByAggregateInput = {
+  bookmarkId?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  tagColor?: InputMaybe<SortOrder>;
+  userId?: InputMaybe<SortOrder>;
+  value?: InputMaybe<SortOrder>;
+};
+
+export type TagOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
+export type TagOrderByWithAggregationInput = {
+  _count?: InputMaybe<TagCountOrderByAggregateInput>;
+  _max?: InputMaybe<TagMaxOrderByAggregateInput>;
+  _min?: InputMaybe<TagMinOrderByAggregateInput>;
+  bookmarkId?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  tagColor?: InputMaybe<SortOrder>;
+  userId?: InputMaybe<SortOrder>;
+  value?: InputMaybe<SortOrder>;
+};
+
+export type TagOrderByWithRelationInput = {
+  Bookmark?: InputMaybe<BookmarkOrderByWithRelationInput>;
+  User?: InputMaybe<UserOrderByWithRelationInput>;
+  bookmarkId?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  tagColor?: InputMaybe<SortOrder>;
+  userId?: InputMaybe<SortOrder>;
+  value?: InputMaybe<SortOrder>;
+};
+
+export enum TagScalarFieldEnum {
+  BookmarkId = 'bookmarkId',
+  Id = 'id',
+  TagColor = 'tagColor',
+  UserId = 'userId',
+  Value = 'value'
+}
+
+export type TagScalarWhereInput = {
+  AND?: InputMaybe<Array<TagScalarWhereInput>>;
+  NOT?: InputMaybe<Array<TagScalarWhereInput>>;
+  OR?: InputMaybe<Array<TagScalarWhereInput>>;
+  bookmarkId?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  tagColor?: InputMaybe<StringFilter>;
+  userId?: InputMaybe<StringFilter>;
+  value?: InputMaybe<StringFilter>;
+};
+
+export type TagScalarWhereWithAggregatesInput = {
+  AND?: InputMaybe<Array<TagScalarWhereWithAggregatesInput>>;
+  NOT?: InputMaybe<Array<TagScalarWhereWithAggregatesInput>>;
+  OR?: InputMaybe<Array<TagScalarWhereWithAggregatesInput>>;
+  bookmarkId?: InputMaybe<StringNullableWithAggregatesFilter>;
+  id?: InputMaybe<StringWithAggregatesFilter>;
+  tagColor?: InputMaybe<StringWithAggregatesFilter>;
+  userId?: InputMaybe<StringWithAggregatesFilter>;
+  value?: InputMaybe<StringWithAggregatesFilter>;
+};
+
+export type TagUpdateInput = {
+  Bookmark?: InputMaybe<BookmarkUpdateOneWithoutTagsNestedInput>;
+  User?: InputMaybe<UserUpdateOneRequiredWithoutTagsNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  tagColor?: InputMaybe<StringFieldUpdateOperationsInput>;
   value?: InputMaybe<StringFieldUpdateOperationsInput>;
 };
 
-export type TagUpsertWithoutUserTagInput = {
-  create: TagCreateWithoutUserTagInput;
-  update: TagUpdateWithoutUserTagInput;
+export type TagUpdateManyMutationInput = {
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  tagColor?: InputMaybe<StringFieldUpdateOperationsInput>;
+  value?: InputMaybe<StringFieldUpdateOperationsInput>;
+};
+
+export type TagUpdateManyWithWhereWithoutBookmarkInput = {
+  data: TagUpdateManyMutationInput;
+  where: TagScalarWhereInput;
+};
+
+export type TagUpdateManyWithWhereWithoutUserInput = {
+  data: TagUpdateManyMutationInput;
+  where: TagScalarWhereInput;
+};
+
+export type TagUpdateManyWithoutBookmarkNestedInput = {
+  connect?: InputMaybe<Array<TagWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<TagCreateOrConnectWithoutBookmarkInput>>;
+  create?: InputMaybe<Array<TagCreateWithoutBookmarkInput>>;
+  createMany?: InputMaybe<TagCreateManyBookmarkInputEnvelope>;
+  delete?: InputMaybe<Array<TagWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<TagScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<TagWhereUniqueInput>>;
+  set?: InputMaybe<Array<TagWhereUniqueInput>>;
+  update?: InputMaybe<Array<TagUpdateWithWhereUniqueWithoutBookmarkInput>>;
+  updateMany?: InputMaybe<Array<TagUpdateManyWithWhereWithoutBookmarkInput>>;
+  upsert?: InputMaybe<Array<TagUpsertWithWhereUniqueWithoutBookmarkInput>>;
+};
+
+export type TagUpdateManyWithoutUserNestedInput = {
+  connect?: InputMaybe<Array<TagWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<TagCreateOrConnectWithoutUserInput>>;
+  create?: InputMaybe<Array<TagCreateWithoutUserInput>>;
+  createMany?: InputMaybe<TagCreateManyUserInputEnvelope>;
+  delete?: InputMaybe<Array<TagWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<TagScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<TagWhereUniqueInput>>;
+  set?: InputMaybe<Array<TagWhereUniqueInput>>;
+  update?: InputMaybe<Array<TagUpdateWithWhereUniqueWithoutUserInput>>;
+  updateMany?: InputMaybe<Array<TagUpdateManyWithWhereWithoutUserInput>>;
+  upsert?: InputMaybe<Array<TagUpsertWithWhereUniqueWithoutUserInput>>;
+};
+
+export type TagUpdateWithWhereUniqueWithoutBookmarkInput = {
+  data: TagUpdateWithoutBookmarkInput;
+  where: TagWhereUniqueInput;
+};
+
+export type TagUpdateWithWhereUniqueWithoutUserInput = {
+  data: TagUpdateWithoutUserInput;
+  where: TagWhereUniqueInput;
+};
+
+export type TagUpdateWithoutBookmarkInput = {
+  User?: InputMaybe<UserUpdateOneRequiredWithoutTagsNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  tagColor?: InputMaybe<StringFieldUpdateOperationsInput>;
+  value?: InputMaybe<StringFieldUpdateOperationsInput>;
+};
+
+export type TagUpdateWithoutUserInput = {
+  Bookmark?: InputMaybe<BookmarkUpdateOneWithoutTagsNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  tagColor?: InputMaybe<StringFieldUpdateOperationsInput>;
+  value?: InputMaybe<StringFieldUpdateOperationsInput>;
+};
+
+export type TagUpsertWithWhereUniqueWithoutBookmarkInput = {
+  create: TagCreateWithoutBookmarkInput;
+  update: TagUpdateWithoutBookmarkInput;
+  where: TagWhereUniqueInput;
+};
+
+export type TagUpsertWithWhereUniqueWithoutUserInput = {
+  create: TagCreateWithoutUserInput;
+  update: TagUpdateWithoutUserInput;
+  where: TagWhereUniqueInput;
 };
 
 export type TagWhereInput = {
   AND?: InputMaybe<Array<TagWhereInput>>;
+  Bookmark?: InputMaybe<BookmarkRelationFilter>;
   NOT?: InputMaybe<Array<TagWhereInput>>;
   OR?: InputMaybe<Array<TagWhereInput>>;
-  UserTag?: InputMaybe<UserTagInternalListRelationFilter>;
+  User?: InputMaybe<UserRelationFilter>;
+  bookmarkId?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
+  tagColor?: InputMaybe<StringFilter>;
+  userId?: InputMaybe<StringFilter>;
   value?: InputMaybe<StringFilter>;
 };
 
@@ -2130,24 +2444,8 @@ export type TagWhereUniqueInput = {
   value?: InputMaybe<Scalars['String']>;
 };
 
-export type UpsertBookmarkInput = {
-  collectionId?: InputMaybe<Scalars['String']>;
-  description: Scalars['String'];
-  id?: InputMaybe<Scalars['String']>;
-  tags: Array<Scalars['String']>;
-  title: Scalars['String'];
-  url: Scalars['String'];
-};
-
-export type UpsertTagInput = {
-  color: Scalars['String'];
-  id?: InputMaybe<Scalars['String']>;
-  name: Scalars['String'];
-};
-
 export type User = {
   __typename?: 'User';
-  BookmarkTag: Array<BookmarkTag>;
   _count?: Maybe<UserCount>;
   accounts: Array<Account>;
   bookmarks: Array<Bookmark>;
@@ -2159,17 +2457,7 @@ export type User = {
   image?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   sessions: Array<Session>;
-  tags: Array<UserTagInternal>;
-};
-
-
-export type UserBookmarkTagArgs = {
-  cursor?: InputMaybe<BookmarkTagWhereUniqueInput>;
-  distinct?: InputMaybe<Array<BookmarkTagScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<BookmarkTagOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<BookmarkTagWhereInput>;
+  tags: Array<Tag>;
 };
 
 
@@ -2224,17 +2512,16 @@ export type UserSessionsArgs = {
 
 
 export type UserTagsArgs = {
-  cursor?: InputMaybe<UserTagInternalWhereUniqueInput>;
-  distinct?: InputMaybe<Array<UserTagInternalScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<UserTagInternalOrderByWithRelationInput>>;
+  cursor?: InputMaybe<TagWhereUniqueInput>;
+  distinct?: InputMaybe<Array<TagScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<TagOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<UserTagInternalWhereInput>;
+  where?: InputMaybe<TagWhereInput>;
 };
 
 export type UserCount = {
   __typename?: 'UserCount';
-  BookmarkTag: Scalars['Int'];
   accounts: Scalars['Int'];
   bookmarks: Scalars['Int'];
   collections: Scalars['Int'];
@@ -2243,16 +2530,10 @@ export type UserCount = {
   tags: Scalars['Int'];
 };
 
-export type UserCreateNestedManyWithoutBookmarksInput = {
-  connect?: InputMaybe<Array<UserWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<UserCreateOrConnectWithoutBookmarksInput>>;
-  create?: InputMaybe<Array<UserCreateWithoutBookmarksInput>>;
-};
-
-export type UserCreateNestedOneWithoutBookmarkTagInput = {
+export type UserCreateNestedOneWithoutBookmarksInput = {
   connect?: InputMaybe<UserWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutBookmarkTagInput>;
-  create?: InputMaybe<UserCreateWithoutBookmarkTagInput>;
+  connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutBookmarksInput>;
+  create?: InputMaybe<UserCreateWithoutBookmarksInput>;
 };
 
 export type UserCreateNestedOneWithoutCollectionsInput = {
@@ -2265,11 +2546,6 @@ export type UserCreateNestedOneWithoutTagsInput = {
   connect?: InputMaybe<UserWhereUniqueInput>;
   connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutTagsInput>;
   create?: InputMaybe<UserCreateWithoutTagsInput>;
-};
-
-export type UserCreateOrConnectWithoutBookmarkTagInput = {
-  create: UserCreateWithoutBookmarkTagInput;
-  where: UserWhereUniqueInput;
 };
 
 export type UserCreateOrConnectWithoutBookmarksInput = {
@@ -2287,22 +2563,7 @@ export type UserCreateOrConnectWithoutTagsInput = {
   where: UserWhereUniqueInput;
 };
 
-export type UserCreateWithoutBookmarkTagInput = {
-  accounts?: InputMaybe<AccountCreateNestedManyWithoutUserInput>;
-  bookmarks?: InputMaybe<BookmarkCreateNestedManyWithoutUsersInput>;
-  collections?: InputMaybe<CollectionCreateNestedManyWithoutUserInput>;
-  email?: InputMaybe<Scalars['String']>;
-  emailVerified?: InputMaybe<Scalars['DateTime']>;
-  externalServices?: InputMaybe<ExternalServiceCredentialCreateNestedManyWithoutUserInput>;
-  id?: InputMaybe<Scalars['String']>;
-  image?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
-  sessions?: InputMaybe<SessionCreateNestedManyWithoutUserInput>;
-  tags?: InputMaybe<UserTagInternalCreateNestedManyWithoutUserInput>;
-};
-
 export type UserCreateWithoutBookmarksInput = {
-  BookmarkTag?: InputMaybe<BookmarkTagCreateNestedManyWithoutUserInput>;
   accounts?: InputMaybe<AccountCreateNestedManyWithoutUserInput>;
   collections?: InputMaybe<CollectionCreateNestedManyWithoutUserInput>;
   email?: InputMaybe<Scalars['String']>;
@@ -2312,13 +2573,12 @@ export type UserCreateWithoutBookmarksInput = {
   image?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   sessions?: InputMaybe<SessionCreateNestedManyWithoutUserInput>;
-  tags?: InputMaybe<UserTagInternalCreateNestedManyWithoutUserInput>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutUserInput>;
 };
 
 export type UserCreateWithoutCollectionsInput = {
-  BookmarkTag?: InputMaybe<BookmarkTagCreateNestedManyWithoutUserInput>;
   accounts?: InputMaybe<AccountCreateNestedManyWithoutUserInput>;
-  bookmarks?: InputMaybe<BookmarkCreateNestedManyWithoutUsersInput>;
+  bookmarks?: InputMaybe<BookmarkCreateNestedManyWithoutUserInput>;
   email?: InputMaybe<Scalars['String']>;
   emailVerified?: InputMaybe<Scalars['DateTime']>;
   externalServices?: InputMaybe<ExternalServiceCredentialCreateNestedManyWithoutUserInput>;
@@ -2326,13 +2586,12 @@ export type UserCreateWithoutCollectionsInput = {
   image?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   sessions?: InputMaybe<SessionCreateNestedManyWithoutUserInput>;
-  tags?: InputMaybe<UserTagInternalCreateNestedManyWithoutUserInput>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutUserInput>;
 };
 
 export type UserCreateWithoutTagsInput = {
-  BookmarkTag?: InputMaybe<BookmarkTagCreateNestedManyWithoutUserInput>;
   accounts?: InputMaybe<AccountCreateNestedManyWithoutUserInput>;
-  bookmarks?: InputMaybe<BookmarkCreateNestedManyWithoutUsersInput>;
+  bookmarks?: InputMaybe<BookmarkCreateNestedManyWithoutUserInput>;
   collections?: InputMaybe<CollectionCreateNestedManyWithoutUserInput>;
   email?: InputMaybe<Scalars['String']>;
   emailVerified?: InputMaybe<Scalars['DateTime']>;
@@ -2343,18 +2602,7 @@ export type UserCreateWithoutTagsInput = {
   sessions?: InputMaybe<SessionCreateNestedManyWithoutUserInput>;
 };
 
-export type UserListRelationFilter = {
-  every?: InputMaybe<UserWhereInput>;
-  none?: InputMaybe<UserWhereInput>;
-  some?: InputMaybe<UserWhereInput>;
-};
-
-export type UserOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
-};
-
 export type UserOrderByWithRelationInput = {
-  BookmarkTag?: InputMaybe<BookmarkTagOrderByRelationAggregateInput>;
   accounts?: InputMaybe<AccountOrderByRelationAggregateInput>;
   bookmarks?: InputMaybe<BookmarkOrderByRelationAggregateInput>;
   collections?: InputMaybe<CollectionOrderByRelationAggregateInput>;
@@ -2365,7 +2613,7 @@ export type UserOrderByWithRelationInput = {
   image?: InputMaybe<SortOrder>;
   name?: InputMaybe<SortOrder>;
   sessions?: InputMaybe<SessionOrderByRelationAggregateInput>;
-  tags?: InputMaybe<UserTagInternalOrderByRelationAggregateInput>;
+  tags?: InputMaybe<TagOrderByRelationAggregateInput>;
 };
 
 export type UserRelationFilter = {
@@ -2373,233 +2621,12 @@ export type UserRelationFilter = {
   isNot?: InputMaybe<UserWhereInput>;
 };
 
-export type UserScalarWhereInput = {
-  AND?: InputMaybe<Array<UserScalarWhereInput>>;
-  NOT?: InputMaybe<Array<UserScalarWhereInput>>;
-  OR?: InputMaybe<Array<UserScalarWhereInput>>;
-  email?: InputMaybe<StringNullableFilter>;
-  emailVerified?: InputMaybe<DateTimeNullableFilter>;
-  id?: InputMaybe<StringFilter>;
-  image?: InputMaybe<StringNullableFilter>;
-  name?: InputMaybe<StringNullableFilter>;
-};
-
-export type UserTag = {
-  __typename?: 'UserTag';
-  color: Scalars['String'];
-  id: Scalars['String'];
-  value: Scalars['String'];
-};
-
-export type UserTagInternal = {
-  __typename?: 'UserTagInternal';
-  _count?: Maybe<UserTagInternalCount>;
-  tagColor: Scalars['String'];
-  tagId: Scalars['String'];
-  userId: Scalars['String'];
-};
-
-export type UserTagInternalCount = {
-  __typename?: 'UserTagInternalCount';
-  BookmarkTag: Scalars['Int'];
-};
-
-export type UserTagInternalCreateManyUserInput = {
-  tagColor: Scalars['String'];
-  tagId: Scalars['String'];
-};
-
-export type UserTagInternalCreateManyUserInputEnvelope = {
-  data: Array<UserTagInternalCreateManyUserInput>;
-  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
-};
-
-export type UserTagInternalCreateNestedManyWithoutUserInput = {
-  connect?: InputMaybe<Array<UserTagInternalWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<UserTagInternalCreateOrConnectWithoutUserInput>>;
-  create?: InputMaybe<Array<UserTagInternalCreateWithoutUserInput>>;
-  createMany?: InputMaybe<UserTagInternalCreateManyUserInputEnvelope>;
-};
-
-export type UserTagInternalCreateNestedOneWithoutBookmarkTagInput = {
-  connect?: InputMaybe<UserTagInternalWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<UserTagInternalCreateOrConnectWithoutBookmarkTagInput>;
-  create?: InputMaybe<UserTagInternalCreateWithoutBookmarkTagInput>;
-};
-
-export type UserTagInternalCreateOrConnectWithoutBookmarkTagInput = {
-  create: UserTagInternalCreateWithoutBookmarkTagInput;
-  where: UserTagInternalWhereUniqueInput;
-};
-
-export type UserTagInternalCreateOrConnectWithoutUserInput = {
-  create: UserTagInternalCreateWithoutUserInput;
-  where: UserTagInternalWhereUniqueInput;
-};
-
-export type UserTagInternalCreateWithoutBookmarkTagInput = {
-  tag: TagCreateNestedOneWithoutUserTagInput;
-  tagColor: Scalars['String'];
-  user: UserCreateNestedOneWithoutTagsInput;
-};
-
-export type UserTagInternalCreateWithoutUserInput = {
-  BookmarkTag?: InputMaybe<BookmarkTagCreateNestedManyWithoutUserTagInput>;
-  tag: TagCreateNestedOneWithoutUserTagInput;
-  tagColor: Scalars['String'];
-};
-
-export type UserTagInternalListRelationFilter = {
-  every?: InputMaybe<UserTagInternalWhereInput>;
-  none?: InputMaybe<UserTagInternalWhereInput>;
-  some?: InputMaybe<UserTagInternalWhereInput>;
-};
-
-export type UserTagInternalOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
-};
-
-export type UserTagInternalOrderByWithRelationInput = {
-  BookmarkTag?: InputMaybe<BookmarkTagOrderByRelationAggregateInput>;
-  tag?: InputMaybe<TagOrderByWithRelationInput>;
-  tagColor?: InputMaybe<SortOrder>;
-  tagId?: InputMaybe<SortOrder>;
-  user?: InputMaybe<UserOrderByWithRelationInput>;
-  userId?: InputMaybe<SortOrder>;
-};
-
-export type UserTagInternalRelationFilter = {
-  is?: InputMaybe<UserTagInternalWhereInput>;
-  isNot?: InputMaybe<UserTagInternalWhereInput>;
-};
-
-export enum UserTagInternalScalarFieldEnum {
-  TagColor = 'tagColor',
-  TagId = 'tagId',
-  UserId = 'userId'
-}
-
-export type UserTagInternalScalarWhereInput = {
-  AND?: InputMaybe<Array<UserTagInternalScalarWhereInput>>;
-  NOT?: InputMaybe<Array<UserTagInternalScalarWhereInput>>;
-  OR?: InputMaybe<Array<UserTagInternalScalarWhereInput>>;
-  tagColor?: InputMaybe<StringFilter>;
-  tagId?: InputMaybe<StringFilter>;
-  userId?: InputMaybe<StringFilter>;
-};
-
-export type UserTagInternalUpdateManyMutationInput = {
-  tagColor?: InputMaybe<StringFieldUpdateOperationsInput>;
-};
-
-export type UserTagInternalUpdateManyWithWhereWithoutUserInput = {
-  data: UserTagInternalUpdateManyMutationInput;
-  where: UserTagInternalScalarWhereInput;
-};
-
-export type UserTagInternalUpdateManyWithoutUserNestedInput = {
-  connect?: InputMaybe<Array<UserTagInternalWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<UserTagInternalCreateOrConnectWithoutUserInput>>;
-  create?: InputMaybe<Array<UserTagInternalCreateWithoutUserInput>>;
-  createMany?: InputMaybe<UserTagInternalCreateManyUserInputEnvelope>;
-  delete?: InputMaybe<Array<UserTagInternalWhereUniqueInput>>;
-  deleteMany?: InputMaybe<Array<UserTagInternalScalarWhereInput>>;
-  disconnect?: InputMaybe<Array<UserTagInternalWhereUniqueInput>>;
-  set?: InputMaybe<Array<UserTagInternalWhereUniqueInput>>;
-  update?: InputMaybe<Array<UserTagInternalUpdateWithWhereUniqueWithoutUserInput>>;
-  updateMany?: InputMaybe<Array<UserTagInternalUpdateManyWithWhereWithoutUserInput>>;
-  upsert?: InputMaybe<Array<UserTagInternalUpsertWithWhereUniqueWithoutUserInput>>;
-};
-
-export type UserTagInternalUpdateOneRequiredWithoutBookmarkTagNestedInput = {
-  connect?: InputMaybe<UserTagInternalWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<UserTagInternalCreateOrConnectWithoutBookmarkTagInput>;
-  create?: InputMaybe<UserTagInternalCreateWithoutBookmarkTagInput>;
-  update?: InputMaybe<UserTagInternalUpdateWithoutBookmarkTagInput>;
-  upsert?: InputMaybe<UserTagInternalUpsertWithoutBookmarkTagInput>;
-};
-
-export type UserTagInternalUpdateWithWhereUniqueWithoutUserInput = {
-  data: UserTagInternalUpdateWithoutUserInput;
-  where: UserTagInternalWhereUniqueInput;
-};
-
-export type UserTagInternalUpdateWithoutBookmarkTagInput = {
-  tag?: InputMaybe<TagUpdateOneRequiredWithoutUserTagNestedInput>;
-  tagColor?: InputMaybe<StringFieldUpdateOperationsInput>;
-  user?: InputMaybe<UserUpdateOneRequiredWithoutTagsNestedInput>;
-};
-
-export type UserTagInternalUpdateWithoutUserInput = {
-  BookmarkTag?: InputMaybe<BookmarkTagUpdateManyWithoutUserTagNestedInput>;
-  tag?: InputMaybe<TagUpdateOneRequiredWithoutUserTagNestedInput>;
-  tagColor?: InputMaybe<StringFieldUpdateOperationsInput>;
-};
-
-export type UserTagInternalUpsertWithWhereUniqueWithoutUserInput = {
-  create: UserTagInternalCreateWithoutUserInput;
-  update: UserTagInternalUpdateWithoutUserInput;
-  where: UserTagInternalWhereUniqueInput;
-};
-
-export type UserTagInternalUpsertWithoutBookmarkTagInput = {
-  create: UserTagInternalCreateWithoutBookmarkTagInput;
-  update: UserTagInternalUpdateWithoutBookmarkTagInput;
-};
-
-export type UserTagInternalUserIdTagIdCompoundUniqueInput = {
-  tagId: Scalars['String'];
-  userId: Scalars['String'];
-};
-
-export type UserTagInternalWhereInput = {
-  AND?: InputMaybe<Array<UserTagInternalWhereInput>>;
-  BookmarkTag?: InputMaybe<BookmarkTagListRelationFilter>;
-  NOT?: InputMaybe<Array<UserTagInternalWhereInput>>;
-  OR?: InputMaybe<Array<UserTagInternalWhereInput>>;
-  tag?: InputMaybe<TagRelationFilter>;
-  tagColor?: InputMaybe<StringFilter>;
-  tagId?: InputMaybe<StringFilter>;
-  user?: InputMaybe<UserRelationFilter>;
-  userId?: InputMaybe<StringFilter>;
-};
-
-export type UserTagInternalWhereUniqueInput = {
-  userId_tagId?: InputMaybe<UserTagInternalUserIdTagIdCompoundUniqueInput>;
-};
-
-export type UserUpdateManyMutationInput = {
-  email?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  emailVerified?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
-  id?: InputMaybe<StringFieldUpdateOperationsInput>;
-  image?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-};
-
-export type UserUpdateManyWithWhereWithoutBookmarksInput = {
-  data: UserUpdateManyMutationInput;
-  where: UserScalarWhereInput;
-};
-
-export type UserUpdateManyWithoutBookmarksNestedInput = {
-  connect?: InputMaybe<Array<UserWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<UserCreateOrConnectWithoutBookmarksInput>>;
-  create?: InputMaybe<Array<UserCreateWithoutBookmarksInput>>;
-  delete?: InputMaybe<Array<UserWhereUniqueInput>>;
-  deleteMany?: InputMaybe<Array<UserScalarWhereInput>>;
-  disconnect?: InputMaybe<Array<UserWhereUniqueInput>>;
-  set?: InputMaybe<Array<UserWhereUniqueInput>>;
-  update?: InputMaybe<Array<UserUpdateWithWhereUniqueWithoutBookmarksInput>>;
-  updateMany?: InputMaybe<Array<UserUpdateManyWithWhereWithoutBookmarksInput>>;
-  upsert?: InputMaybe<Array<UserUpsertWithWhereUniqueWithoutBookmarksInput>>;
-};
-
-export type UserUpdateOneRequiredWithoutBookmarkTagNestedInput = {
+export type UserUpdateOneRequiredWithoutBookmarksNestedInput = {
   connect?: InputMaybe<UserWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutBookmarkTagInput>;
-  create?: InputMaybe<UserCreateWithoutBookmarkTagInput>;
-  update?: InputMaybe<UserUpdateWithoutBookmarkTagInput>;
-  upsert?: InputMaybe<UserUpsertWithoutBookmarkTagInput>;
+  connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutBookmarksInput>;
+  create?: InputMaybe<UserCreateWithoutBookmarksInput>;
+  update?: InputMaybe<UserUpdateWithoutBookmarksInput>;
+  upsert?: InputMaybe<UserUpsertWithoutBookmarksInput>;
 };
 
 export type UserUpdateOneRequiredWithoutTagsNestedInput = {
@@ -2620,27 +2647,7 @@ export type UserUpdateOneWithoutCollectionsNestedInput = {
   upsert?: InputMaybe<UserUpsertWithoutCollectionsInput>;
 };
 
-export type UserUpdateWithWhereUniqueWithoutBookmarksInput = {
-  data: UserUpdateWithoutBookmarksInput;
-  where: UserWhereUniqueInput;
-};
-
-export type UserUpdateWithoutBookmarkTagInput = {
-  accounts?: InputMaybe<AccountUpdateManyWithoutUserNestedInput>;
-  bookmarks?: InputMaybe<BookmarkUpdateManyWithoutUsersNestedInput>;
-  collections?: InputMaybe<CollectionUpdateManyWithoutUserNestedInput>;
-  email?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  emailVerified?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
-  externalServices?: InputMaybe<ExternalServiceCredentialUpdateManyWithoutUserNestedInput>;
-  id?: InputMaybe<StringFieldUpdateOperationsInput>;
-  image?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  sessions?: InputMaybe<SessionUpdateManyWithoutUserNestedInput>;
-  tags?: InputMaybe<UserTagInternalUpdateManyWithoutUserNestedInput>;
-};
-
 export type UserUpdateWithoutBookmarksInput = {
-  BookmarkTag?: InputMaybe<BookmarkTagUpdateManyWithoutUserNestedInput>;
   accounts?: InputMaybe<AccountUpdateManyWithoutUserNestedInput>;
   collections?: InputMaybe<CollectionUpdateManyWithoutUserNestedInput>;
   email?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -2650,13 +2657,12 @@ export type UserUpdateWithoutBookmarksInput = {
   image?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   sessions?: InputMaybe<SessionUpdateManyWithoutUserNestedInput>;
-  tags?: InputMaybe<UserTagInternalUpdateManyWithoutUserNestedInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutUserNestedInput>;
 };
 
 export type UserUpdateWithoutCollectionsInput = {
-  BookmarkTag?: InputMaybe<BookmarkTagUpdateManyWithoutUserNestedInput>;
   accounts?: InputMaybe<AccountUpdateManyWithoutUserNestedInput>;
-  bookmarks?: InputMaybe<BookmarkUpdateManyWithoutUsersNestedInput>;
+  bookmarks?: InputMaybe<BookmarkUpdateManyWithoutUserNestedInput>;
   email?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   emailVerified?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   externalServices?: InputMaybe<ExternalServiceCredentialUpdateManyWithoutUserNestedInput>;
@@ -2664,13 +2670,12 @@ export type UserUpdateWithoutCollectionsInput = {
   image?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   sessions?: InputMaybe<SessionUpdateManyWithoutUserNestedInput>;
-  tags?: InputMaybe<UserTagInternalUpdateManyWithoutUserNestedInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutUserNestedInput>;
 };
 
 export type UserUpdateWithoutTagsInput = {
-  BookmarkTag?: InputMaybe<BookmarkTagUpdateManyWithoutUserNestedInput>;
   accounts?: InputMaybe<AccountUpdateManyWithoutUserNestedInput>;
-  bookmarks?: InputMaybe<BookmarkUpdateManyWithoutUsersNestedInput>;
+  bookmarks?: InputMaybe<BookmarkUpdateManyWithoutUserNestedInput>;
   collections?: InputMaybe<CollectionUpdateManyWithoutUserNestedInput>;
   email?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   emailVerified?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -2681,15 +2686,9 @@ export type UserUpdateWithoutTagsInput = {
   sessions?: InputMaybe<SessionUpdateManyWithoutUserNestedInput>;
 };
 
-export type UserUpsertWithWhereUniqueWithoutBookmarksInput = {
+export type UserUpsertWithoutBookmarksInput = {
   create: UserCreateWithoutBookmarksInput;
   update: UserUpdateWithoutBookmarksInput;
-  where: UserWhereUniqueInput;
-};
-
-export type UserUpsertWithoutBookmarkTagInput = {
-  create: UserCreateWithoutBookmarkTagInput;
-  update: UserUpdateWithoutBookmarkTagInput;
 };
 
 export type UserUpsertWithoutCollectionsInput = {
@@ -2704,7 +2703,6 @@ export type UserUpsertWithoutTagsInput = {
 
 export type UserWhereInput = {
   AND?: InputMaybe<Array<UserWhereInput>>;
-  BookmarkTag?: InputMaybe<BookmarkTagListRelationFilter>;
   NOT?: InputMaybe<Array<UserWhereInput>>;
   OR?: InputMaybe<Array<UserWhereInput>>;
   accounts?: InputMaybe<AccountListRelationFilter>;
@@ -2717,7 +2715,7 @@ export type UserWhereInput = {
   image?: InputMaybe<StringNullableFilter>;
   name?: InputMaybe<StringNullableFilter>;
   sessions?: InputMaybe<SessionListRelationFilter>;
-  tags?: InputMaybe<UserTagInternalListRelationFilter>;
+  tags?: InputMaybe<TagListRelationFilter>;
 };
 
 export type UserWhereUniqueInput = {
@@ -2726,11 +2724,13 @@ export type UserWhereUniqueInput = {
 };
 
 export type UpsertBookmarkMutationMutationVariables = Exact<{
-  upsertBookmarkInput: UpsertBookmarkInput;
+  where: BookmarkWhereUniqueInput;
+  create: BookmarkCreateInput;
+  update: BookmarkUpdateInput;
 }>;
 
 
-export type UpsertBookmarkMutationMutation = { __typename?: 'Mutation', upsertBookmark: { __typename?: 'Bookmark', id: string } };
+export type UpsertBookmarkMutationMutation = { __typename?: 'Mutation', upsertOneBookmark: { __typename?: 'Bookmark', id: string } };
 
 export type CreateCollectionMutationMutationVariables = Exact<{
   data: CollectionCreateInput;
@@ -2761,18 +2761,18 @@ export type ActivateExternalServiceMutationMutationVariables = Exact<{
 export type ActivateExternalServiceMutationMutation = { __typename?: 'Mutation', activateUsernameAndPasswordExternalService: boolean };
 
 export type AddTagMutationMutationVariables = Exact<{
-  upsertTagInput: UpsertTagInput;
+  data: TagCreateInput;
 }>;
 
 
-export type AddTagMutationMutation = { __typename?: 'Mutation', upsertTag: { __typename?: 'UserTag', id: string } };
+export type AddTagMutationMutation = { __typename?: 'Mutation', createOneTag: { __typename?: 'Tag', id: string } };
 
 export type DeleteTagMutationMutationVariables = Exact<{
-  id: Scalars['String'];
+  where: TagWhereUniqueInput;
 }>;
 
 
-export type DeleteTagMutationMutation = { __typename?: 'Mutation', deleteTag: boolean };
+export type DeleteTagMutationMutation = { __typename?: 'Mutation', deleteOneTag?: { __typename?: 'Tag', id: string } | null };
 
 export type BookmarkCollectionQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2787,32 +2787,25 @@ export type AddBookmarkMutationMutationVariables = Exact<{
 export type AddBookmarkMutationMutation = { __typename?: 'Mutation', addBookmarkToCollection: boolean };
 
 export type BookmarkQueryQueryVariables = Exact<{
-  filter: BookmarkFilter;
+  where: BookmarkWhereInput;
 }>;
 
 
-export type BookmarkQueryQuery = { __typename?: 'Query', bookmarks: Array<{ __typename?: 'BookmarkCustom', id: string, title: string, description: string, url: string, createdAt: any, tags: Array<{ __typename?: 'Tag', id: string, value: string }> }>, tags: Array<{ __typename?: 'UserTag', id: string, value: string, color: string }>, user: { __typename?: 'User', id: string, externalServices: Array<{ __typename?: 'ExternalServiceCredential', externalService: { __typename?: 'ExternalService', type: ExternalServiceType } }> } };
+export type BookmarkQueryQuery = { __typename?: 'Query', bookmarks: Array<{ __typename?: 'Bookmark', id: string, title: string, description: string, url: string, createdAt: any, tags: Array<{ __typename?: 'Tag', id: string, value: string }> }>, tags: Array<{ __typename?: 'Tag', id: string, value: string, tagColor: string }>, user: { __typename?: 'User', id: string, externalServices: Array<{ __typename?: 'ExternalServiceCredential', externalService: { __typename?: 'ExternalService', type: ExternalServiceType } }> } };
 
 export type DeleteBookmarkMutationMutationVariables = Exact<{
-  id: Scalars['String'];
+  where: BookmarkWhereUniqueInput;
 }>;
 
 
-export type DeleteBookmarkMutationMutation = { __typename?: 'Mutation', deleteBookmark: { __typename?: 'Bookmark', id: string } };
+export type DeleteBookmarkMutationMutation = { __typename?: 'Mutation', deleteOneBookmark?: { __typename?: 'Bookmark', id: string } | null };
 
 export type CollectionQueryQueryVariables = Exact<{
   where: CollectionWhereUniqueInput;
 }>;
 
 
-export type CollectionQueryQuery = { __typename?: 'Query', collections: Array<{ __typename?: 'Collection', id: string, name: string, description: string, createdAt: any, public: boolean, _count?: { __typename?: 'CollectionCount', bookmarks: number } | null }>, collection?: { __typename?: 'Collection', id: string, name: string, public: boolean, bookmarks: Array<{ __typename?: 'BookmarkCustom', id: string, title: string, description: string, url: string, createdAt: any, tags: Array<{ __typename?: 'Tag', id: string, value: string }> }> } | null, tags: Array<{ __typename?: 'UserTag', id: string, value: string, color: string }> };
-
-export type RemoveBookmarkMutationMutationVariables = Exact<{
-  input: RemoveBookmarkFromCollectionInput;
-}>;
-
-
-export type RemoveBookmarkMutationMutation = { __typename?: 'Mutation', removeBookmarkFromCollection: boolean };
+export type CollectionQueryQuery = { __typename?: 'Query', collections: Array<{ __typename?: 'Collection', id: string, name: string, description: string, createdAt: any, public: boolean, _count?: { __typename?: 'CollectionCount', bookmarks: number } | null }>, collection?: { __typename?: 'Collection', id: string, name: string, public: boolean, bookmarks: Array<{ __typename?: 'BookmarkCustom', id: string, title: string, description: string, url: string, createdAt: any, tags: Array<{ __typename?: 'Tag', id: string, value: string }> }> } | null, tags: Array<{ __typename?: 'Tag', id: string, value: string, tagColor: string }> };
 
 export type CollectionsQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2840,6 +2833,8 @@ export type AvailableExternalServicesQueryQuery = { __typename?: 'Query', user: 
 
 export type ExternalServiceCredentialFragmentFragment = { __typename?: 'ExternalServiceCredential', id: string, externalService: { __typename?: 'ExternalService', id: string, type: ExternalServiceType, authType: ExternalServiceAuthType } } & { ' $fragmentName'?: 'ExternalServiceCredentialFragmentFragment' };
 
+export type TagFragmentFragment = { __typename?: 'Tag', id: string, value: string, tagColor: string } & { ' $fragmentName'?: 'TagFragmentFragment' };
+
 export type SettingsQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2848,25 +2843,25 @@ export type SettingsQueryQuery = { __typename?: 'Query', user: { __typename?: 'U
 export type TagQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TagQueryQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'UserTag', id: string, value: string, color: string }> };
+export type TagQueryQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', id: string, value: string, tagColor: string }> };
 
 export const ExternalServiceCredentialFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ExternalServiceCredentialFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ExternalServiceCredential"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"externalService"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"authType"}}]}}]}}]} as unknown as DocumentNode<ExternalServiceCredentialFragmentFragment, unknown>;
-export const UpsertBookmarkMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpsertBookmarkMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"upsertBookmarkInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpsertBookmarkInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"upsertBookmark"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"upsertBookmarkInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"upsertBookmarkInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpsertBookmarkMutationMutation, UpsertBookmarkMutationMutationVariables>;
+export const TagFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"TagFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Tag"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"tagColor"}}]}}]} as unknown as DocumentNode<TagFragmentFragment, unknown>;
+export const UpsertBookmarkMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpsertBookmarkMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BookmarkWhereUniqueInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"create"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BookmarkCreateInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"update"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BookmarkUpdateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"upsertOneBookmark"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"create"},"value":{"kind":"Variable","name":{"kind":"Name","value":"create"}}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"Variable","name":{"kind":"Name","value":"update"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpsertBookmarkMutationMutation, UpsertBookmarkMutationMutationVariables>;
 export const CreateCollectionMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCollectionMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CollectionCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createOneCollection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateCollectionMutationMutation, CreateCollectionMutationMutationVariables>;
 export const ActivateApiTokenExternalServiceMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ActivateAPITokenExternalServiceMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ActivateAPITokenServiceInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"activateAPITokenExternalService"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}]}]}}]} as unknown as DocumentNode<ActivateApiTokenExternalServiceMutationMutation, ActivateApiTokenExternalServiceMutationMutationVariables>;
 export const DeactivateExternalServiceMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeactivateExternalServiceMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"serviceType"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ExternalServiceType"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deactivateExternalService"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"serviceType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"serviceType"}}}]}]}}]} as unknown as DocumentNode<DeactivateExternalServiceMutationMutation, DeactivateExternalServiceMutationMutationVariables>;
 export const ActivateExternalServiceMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ActivateExternalServiceMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ActivateUsernameAndPasswordServiceInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"activateUsernameAndPasswordExternalService"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}]}]}}]} as unknown as DocumentNode<ActivateExternalServiceMutationMutation, ActivateExternalServiceMutationMutationVariables>;
-export const AddTagMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AddTagMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"upsertTagInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpsertTagInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"upsertTag"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"upsertTagInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"upsertTagInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<AddTagMutationMutation, AddTagMutationMutationVariables>;
-export const DeleteTagMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteTagMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteTag"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}]}}]} as unknown as DocumentNode<DeleteTagMutationMutation, DeleteTagMutationMutationVariables>;
+export const AddTagMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AddTagMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"TagCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createOneTag"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<AddTagMutationMutation, AddTagMutationMutationVariables>;
+export const DeleteTagMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteTagMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"TagWhereUniqueInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteOneTag"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteTagMutationMutation, DeleteTagMutationMutationVariables>;
 export const BookmarkCollectionQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"BookmarkCollectionQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"collections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"bookmarks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]} as unknown as DocumentNode<BookmarkCollectionQueryQuery, BookmarkCollectionQueryQueryVariables>;
 export const AddBookmarkMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AddBookmarkMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AddBookmarkToCollectionInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addBookmarkToCollection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"addBookmarkToCollectionInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}]}]}}]} as unknown as DocumentNode<AddBookmarkMutationMutation, AddBookmarkMutationMutationVariables>;
-export const BookmarkQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"BookmarkQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BookmarkFilter"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bookmarks"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"color"}}]}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"externalServices"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"externalService"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]}}]}}]}}]} as unknown as DocumentNode<BookmarkQueryQuery, BookmarkQueryQueryVariables>;
-export const DeleteBookmarkMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteBookmarkMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteBookmark"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteBookmarkMutationMutation, DeleteBookmarkMutationMutationVariables>;
-export const CollectionQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CollectionQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CollectionWhereUniqueInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"collections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"public"}},{"kind":"Field","name":{"kind":"Name","value":"_count"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bookmarks"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"collection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"public"}},{"kind":"Field","name":{"kind":"Name","value":"bookmarks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"color"}}]}}]}}]} as unknown as DocumentNode<CollectionQueryQuery, CollectionQueryQueryVariables>;
-export const RemoveBookmarkMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RemoveBookmarkMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RemoveBookmarkFromCollectionInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"removeBookmarkFromCollection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"removeBookmarkFromCollectionInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}]}]}}]} as unknown as DocumentNode<RemoveBookmarkMutationMutation, RemoveBookmarkMutationMutationVariables>;
+export const BookmarkQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"BookmarkQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BookmarkWhereInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bookmarks"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"tagColor"}}]}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"externalServices"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"externalService"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]}}]}}]}}]} as unknown as DocumentNode<BookmarkQueryQuery, BookmarkQueryQueryVariables>;
+export const DeleteBookmarkMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteBookmarkMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BookmarkWhereUniqueInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteOneBookmark"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteBookmarkMutationMutation, DeleteBookmarkMutationMutationVariables>;
+export const CollectionQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CollectionQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CollectionWhereUniqueInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"collections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"public"}},{"kind":"Field","name":{"kind":"Name","value":"_count"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bookmarks"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"collection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"public"}},{"kind":"Field","name":{"kind":"Name","value":"bookmarks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"tagColor"}}]}}]}}]} as unknown as DocumentNode<CollectionQueryQuery, CollectionQueryQueryVariables>;
 export const CollectionsQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CollectionsQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"collections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"public"}},{"kind":"Field","name":{"kind":"Name","value":"_count"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bookmarks"}}]}}]}}]}}]} as unknown as DocumentNode<CollectionsQueryQuery, CollectionsQueryQueryVariables>;
 export const DeleteCollectionMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteCollectionMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CollectionWhereUniqueInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteOneCollection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteCollectionMutationMutation, DeleteCollectionMutationMutationVariables>;
 export const ShareToExternalServiceMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ShareToExternalServiceMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ShareInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"shareToExternalService"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}]}]}}]} as unknown as DocumentNode<ShareToExternalServiceMutationMutation, ShareToExternalServiceMutationMutationVariables>;
 export const AvailableExternalServicesQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AvailableExternalServicesQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"externalServices"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"externalService"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]}}]}}]}}]} as unknown as DocumentNode<AvailableExternalServicesQueryQuery, AvailableExternalServicesQueryQueryVariables>;
 export const SettingsQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SettingsQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"externalServices"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"externalService"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"authType"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"externalServices"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"authType"}}]}}]}}]} as unknown as DocumentNode<SettingsQueryQuery, SettingsQueryQueryVariables>;
-export const TagQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"TagQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"color"}}]}}]}}]} as unknown as DocumentNode<TagQueryQuery, TagQueryQueryVariables>;
+export const TagQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"TagQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"tagColor"}}]}}]}}]} as unknown as DocumentNode<TagQueryQuery, TagQueryQueryVariables>;

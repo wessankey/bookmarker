@@ -3,8 +3,7 @@ import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { AccountCreateNestedManyWithoutUserInput } from "../inputs/AccountCreateNestedManyWithoutUserInput";
-import { BookmarkCreateNestedManyWithoutUsersInput } from "../inputs/BookmarkCreateNestedManyWithoutUsersInput";
-import { BookmarkTagCreateNestedManyWithoutUserInput } from "../inputs/BookmarkTagCreateNestedManyWithoutUserInput";
+import { BookmarkCreateNestedManyWithoutUserInput } from "../inputs/BookmarkCreateNestedManyWithoutUserInput";
 import { CollectionCreateNestedManyWithoutUserInput } from "../inputs/CollectionCreateNestedManyWithoutUserInput";
 import { ExternalServiceCredentialCreateNestedManyWithoutUserInput } from "../inputs/ExternalServiceCredentialCreateNestedManyWithoutUserInput";
 import { SessionCreateNestedManyWithoutUserInput } from "../inputs/SessionCreateNestedManyWithoutUserInput";
@@ -38,10 +37,10 @@ export class UserCreateWithoutTagsInput {
   })
   image?: string | undefined;
 
-  @TypeGraphQL.Field(_type => BookmarkCreateNestedManyWithoutUsersInput, {
+  @TypeGraphQL.Field(_type => BookmarkCreateNestedManyWithoutUserInput, {
     nullable: true
   })
-  bookmarks?: BookmarkCreateNestedManyWithoutUsersInput | undefined;
+  bookmarks?: BookmarkCreateNestedManyWithoutUserInput | undefined;
 
   @TypeGraphQL.Field(_type => CollectionCreateNestedManyWithoutUserInput, {
     nullable: true
@@ -62,9 +61,4 @@ export class UserCreateWithoutTagsInput {
     nullable: true
   })
   externalServices?: ExternalServiceCredentialCreateNestedManyWithoutUserInput | undefined;
-
-  @TypeGraphQL.Field(_type => BookmarkTagCreateNestedManyWithoutUserInput, {
-    nullable: true
-  })
-  BookmarkTag?: BookmarkTagCreateNestedManyWithoutUserInput | undefined;
 }

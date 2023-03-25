@@ -10,12 +10,7 @@ export class BookmarkCount {
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
     nullable: false
   })
-  users!: number;
-
-  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
-    nullable: false
-  })
-  BookmarkTag!: number;
+  tags!: number;
 
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
     nullable: false

@@ -36,9 +36,4 @@ export class UserCount {
     nullable: false
   })
   externalServices!: number;
-
-  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
-    nullable: false
-  })
-  BookmarkTag!: number;
 }

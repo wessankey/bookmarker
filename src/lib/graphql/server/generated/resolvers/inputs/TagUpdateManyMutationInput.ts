@@ -17,4 +17,9 @@ export class TagUpdateManyMutationInput {
     nullable: true
   })
   value?: StringFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => StringFieldUpdateOperationsInput, {
+    nullable: true
+  })
+  tagColor?: StringFieldUpdateOperationsInput | undefined;
 }

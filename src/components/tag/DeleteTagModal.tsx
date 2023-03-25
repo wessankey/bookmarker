@@ -4,7 +4,6 @@ import { graphql } from "../../../gql";
 import { TagQueryDocument } from "../../../gql/graphql";
 import { ButtonSpinner } from "../common/ButtonSpinner";
 import { Modal } from "../common/Modal";
-import { Spinner } from "../common/Spinner";
 
 type TDeleteTagModalProps = {
   id: string;
@@ -13,8 +12,10 @@ type TDeleteTagModalProps = {
 };
 
 const DeleteTagMutation = graphql(/* GraphQL */ `
-  mutation DeleteTagMutation($id: String!) {
-    deleteTag(id: $id)
+  mutation DeleteTagMutation($where: TagWhereUniqueInput!) {
+    deleteOneTag(where: $where) {
+      id
+    }
   }
 `);
 
@@ -33,7 +34,9 @@ export const DeleteTagModal: React.FC<TDeleteTagModalProps> = ({
     setIsDeleting(true);
     DeleteTag({
       variables: {
-        id,
+        where: {
+          id,
+        },
       },
     }).then(() => {
       setIsDeleting(false);

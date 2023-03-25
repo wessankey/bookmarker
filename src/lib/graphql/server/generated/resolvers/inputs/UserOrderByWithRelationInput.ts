@@ -4,11 +4,10 @@ import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { AccountOrderByRelationAggregateInput } from "../inputs/AccountOrderByRelationAggregateInput";
 import { BookmarkOrderByRelationAggregateInput } from "../inputs/BookmarkOrderByRelationAggregateInput";
-import { BookmarkTagOrderByRelationAggregateInput } from "../inputs/BookmarkTagOrderByRelationAggregateInput";
 import { CollectionOrderByRelationAggregateInput } from "../inputs/CollectionOrderByRelationAggregateInput";
 import { ExternalServiceCredentialOrderByRelationAggregateInput } from "../inputs/ExternalServiceCredentialOrderByRelationAggregateInput";
 import { SessionOrderByRelationAggregateInput } from "../inputs/SessionOrderByRelationAggregateInput";
-import { UserTagInternalOrderByRelationAggregateInput } from "../inputs/UserTagInternalOrderByRelationAggregateInput";
+import { TagOrderByRelationAggregateInput } from "../inputs/TagOrderByRelationAggregateInput";
 import { SortOrder } from "../../enums/SortOrder";
 
 @TypeGraphQL.InputType("UserOrderByWithRelationInput", {
@@ -60,18 +59,13 @@ export class UserOrderByWithRelationInput {
   })
   sessions?: SessionOrderByRelationAggregateInput | undefined;
 
-  @TypeGraphQL.Field(_type => UserTagInternalOrderByRelationAggregateInput, {
+  @TypeGraphQL.Field(_type => TagOrderByRelationAggregateInput, {
     nullable: true
   })
-  tags?: UserTagInternalOrderByRelationAggregateInput | undefined;
+  tags?: TagOrderByRelationAggregateInput | undefined;
 
   @TypeGraphQL.Field(_type => ExternalServiceCredentialOrderByRelationAggregateInput, {
     nullable: true
   })
   externalServices?: ExternalServiceCredentialOrderByRelationAggregateInput | undefined;
-
-  @TypeGraphQL.Field(_type => BookmarkTagOrderByRelationAggregateInput, {
-    nullable: true
-  })
-  BookmarkTag?: BookmarkTagOrderByRelationAggregateInput | undefined;
 }

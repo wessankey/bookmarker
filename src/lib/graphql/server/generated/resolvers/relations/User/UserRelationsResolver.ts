@@ -2,14 +2,12 @@ import * as TypeGraphQL from "type-graphql";
 import type { GraphQLResolveInfo } from "graphql";
 import { Account } from "../../../models/Account";
 import { Bookmark } from "../../../models/Bookmark";
-import { BookmarkTag } from "../../../models/BookmarkTag";
 import { Collection } from "../../../models/Collection";
 import { ExternalServiceCredential } from "../../../models/ExternalServiceCredential";
 import { Session } from "../../../models/Session";
+import { Tag } from "../../../models/Tag";
 import { User } from "../../../models/User";
-import { UserTagInternal } from "../../../models/UserTagInternal";
 import { UserAccountsArgs } from "./args/UserAccountsArgs";
-import { UserBookmarkTagArgs } from "./args/UserBookmarkTagArgs";
 import { UserBookmarksArgs } from "./args/UserBookmarksArgs";
 import { UserCollectionsArgs } from "./args/UserCollectionsArgs";
 import { UserExternalServicesArgs } from "./args/UserExternalServicesArgs";
@@ -79,10 +77,10 @@ export class UserRelationsResolver {
     });
   }
 
-  @TypeGraphQL.FieldResolver(_type => [UserTagInternal], {
+  @TypeGraphQL.FieldResolver(_type => [Tag], {
     nullable: false
   })
-  async tags(@TypeGraphQL.Root() user: User, @TypeGraphQL.Ctx() ctx: any, @TypeGraphQL.Info() info: GraphQLResolveInfo, @TypeGraphQL.Args() args: UserTagsArgs): Promise<UserTagInternal[]> {
+  async tags(@TypeGraphQL.Root() user: User, @TypeGraphQL.Ctx() ctx: any, @TypeGraphQL.Info() info: GraphQLResolveInfo, @TypeGraphQL.Args() args: UserTagsArgs): Promise<Tag[]> {
     const { _count } = transformInfoIntoPrismaArgs(info);
     return getPrismaFromContext(ctx).user.findUnique({
       where: {
@@ -104,21 +102,6 @@ export class UserRelationsResolver {
         id: user.id,
       },
     }).externalServices({
-      ...args,
-      ...(_count && transformCountFieldIntoSelectRelationsCount(_count)),
-    });
-  }
-
-  @TypeGraphQL.FieldResolver(_type => [BookmarkTag], {
-    nullable: false
-  })
-  async BookmarkTag(@TypeGraphQL.Root() user: User, @TypeGraphQL.Ctx() ctx: any, @TypeGraphQL.Info() info: GraphQLResolveInfo, @TypeGraphQL.Args() args: UserBookmarkTagArgs): Promise<BookmarkTag[]> {
-    const { _count } = transformInfoIntoPrismaArgs(info);
-    return getPrismaFromContext(ctx).user.findUnique({
-      where: {
-        id: user.id,
-      },
-    }).BookmarkTag({
       ...args,
       ...(_count && transformCountFieldIntoSelectRelationsCount(_count)),
     });

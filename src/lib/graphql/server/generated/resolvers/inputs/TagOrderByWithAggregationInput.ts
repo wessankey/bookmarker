@@ -21,6 +21,21 @@ export class TagOrderByWithAggregationInput {
   })
   value?: "asc" | "desc" | undefined;
 
+  @TypeGraphQL.Field(_type => SortOrder, {
+    nullable: true
+  })
+  userId?: "asc" | "desc" | undefined;
+
+  @TypeGraphQL.Field(_type => SortOrder, {
+    nullable: true
+  })
+  tagColor?: "asc" | "desc" | undefined;
+
+  @TypeGraphQL.Field(_type => SortOrder, {
+    nullable: true
+  })
+  bookmarkId?: "asc" | "desc" | undefined;
+
   @TypeGraphQL.Field(_type => TagCountOrderByAggregateInput, {
     nullable: true
   })

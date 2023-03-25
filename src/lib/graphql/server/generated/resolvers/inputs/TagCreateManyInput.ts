@@ -16,4 +16,19 @@ export class TagCreateManyInput {
     nullable: false
   })
   value!: string;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: false
+  })
+  userId!: string;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: false
+  })
+  tagColor!: string;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true
+  })
+  bookmarkId?: string | undefined;
 }

@@ -4,11 +4,10 @@ import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../scalars";
 import { Account } from "../models/Account";
 import { Bookmark } from "../models/Bookmark";
-import { BookmarkTag } from "../models/BookmarkTag";
 import { Collection } from "../models/Collection";
 import { ExternalServiceCredential } from "../models/ExternalServiceCredential";
 import { Session } from "../models/Session";
-import { UserTagInternal } from "../models/UserTagInternal";
+import { Tag } from "../models/Tag";
 import { UserCount } from "../resolvers/outputs/UserCount";
 
 @TypeGraphQL.ObjectType("User", {
@@ -48,11 +47,9 @@ export class User {
 
   sessions?: Session[];
 
-  tags?: UserTagInternal[];
+  tags?: Tag[];
 
   externalServices?: ExternalServiceCredential[];
-
-  BookmarkTag?: BookmarkTag[];
 
   @TypeGraphQL.Field(_type => UserCount, {
     nullable: true

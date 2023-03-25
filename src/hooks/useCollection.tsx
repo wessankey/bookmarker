@@ -33,16 +33,16 @@ const CollectionQuery = graphql(/* GraphQL */ `
     tags {
       id
       value
-      color
+      tagColor
     }
   }
 `);
 
-const RemoveBookmarkMutation = graphql(/* GraphQL */ `
-  mutation RemoveBookmarkMutation($input: RemoveBookmarkFromCollectionInput!) {
-    removeBookmarkFromCollection(removeBookmarkFromCollectionInput: $input)
-  }
-`);
+// const RemoveBookmarkMutation = graphql(/* GraphQL */ `
+//   mutation RemoveBookmarkMutation($input: RemoveBookmarkFromCollectionInput!) {
+//     removeBookmarkFromCollection(removeBookmarkFromCollectionInput: $input)
+//   }
+// `);
 
 export const useCollection = (id: string) => {
   const [showAddBookmarkModal, setShowAddBookmarkModal] = useState(false);

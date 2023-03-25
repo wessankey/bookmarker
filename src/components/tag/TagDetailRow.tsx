@@ -1,18 +1,18 @@
 import { useMutation } from "@apollo/client";
 import { Formik } from "formik";
-import { useState } from "react";
-
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useState } from "react";
 import { BlockPicker } from "react-color";
+import { graphql } from "../../../gql/gql";
+import { TagQueryDocument } from "../../../gql/graphql";
 import { useOutsideClick } from "../../lib/hooks/useOutsideClick";
 import { DeleteTagModal } from "./DeleteTagModal";
 import { Tag } from "./Tag";
-import { TTag } from "./types";
-import { graphql } from "../../../gql";
-import { TagQueryDocument } from "../../../gql/graphql";
+import { TagFragmentFragment } from "../../../gql/graphql";
 
 type TTagDetailRowProps = {
-  tag: TTag;
+  tag: TagFragmentFragment;
 };
 
 type TUpdateTagForm = {
@@ -21,8 +21,8 @@ type TUpdateTagForm = {
 };
 
 const AddTagMutation = graphql(/* GraphQL */ `
-  mutation AddTagMutation($upsertTagInput: UpsertTagInput!) {
-    upsertTag(upsertTagInput: $upsertTagInput) {
+  mutation AddTagMutation($data: TagCreateInput!) {
+    createOneTag(data: $data) {
       id
     }
   }
@@ -82,7 +82,7 @@ export const TagDetailRow = ({ tag }: TTagDetailRowProps) => {
         <TagSettings
           id={tag.id}
           name={tag.value}
-          color={tag.color}
+          color={tag.tagColor}
           onToggleSettings={handleToggleSettings}
         />
       )}
@@ -105,6 +105,8 @@ const TagSettings = ({
     refetchQueries: [TagQueryDocument],
   });
 
+  const session = useSession();
+
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [pickedColor, setPickedColor] = useState(color);
 
@@ -113,10 +115,15 @@ const TagSettings = ({
   const handleUpdateTag = (values: TUpdateTagForm) => {
     updateTag({
       variables: {
-        upsertTagInput: {
+        data: {
           id,
-          name: values.name,
-          color: values.color,
+          value: values.name,
+          tagColor: values.color,
+          User: {
+            connect: {
+              id: session.data?.user.id,
+            },
+          },
         },
       },
     }).then((res) => {

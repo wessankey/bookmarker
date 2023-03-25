@@ -10,3 +10,11 @@ export const ExternalServiceCredentialFragment = graphql(/* GraphQL */ `
     }
   }
 `);
+
+export const TagFragment = graphql(/* GraphQL */ `
+  fragment TagFragment on Tag {
+    id
+    value
+    tagColor
+  }
+`);

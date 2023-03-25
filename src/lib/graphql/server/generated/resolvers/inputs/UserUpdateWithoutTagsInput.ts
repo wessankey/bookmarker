@@ -3,8 +3,7 @@ import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { AccountUpdateManyWithoutUserNestedInput } from "../inputs/AccountUpdateManyWithoutUserNestedInput";
-import { BookmarkTagUpdateManyWithoutUserNestedInput } from "../inputs/BookmarkTagUpdateManyWithoutUserNestedInput";
-import { BookmarkUpdateManyWithoutUsersNestedInput } from "../inputs/BookmarkUpdateManyWithoutUsersNestedInput";
+import { BookmarkUpdateManyWithoutUserNestedInput } from "../inputs/BookmarkUpdateManyWithoutUserNestedInput";
 import { CollectionUpdateManyWithoutUserNestedInput } from "../inputs/CollectionUpdateManyWithoutUserNestedInput";
 import { ExternalServiceCredentialUpdateManyWithoutUserNestedInput } from "../inputs/ExternalServiceCredentialUpdateManyWithoutUserNestedInput";
 import { NullableDateTimeFieldUpdateOperationsInput } from "../inputs/NullableDateTimeFieldUpdateOperationsInput";
@@ -41,10 +40,10 @@ export class UserUpdateWithoutTagsInput {
   })
   image?: NullableStringFieldUpdateOperationsInput | undefined;
 
-  @TypeGraphQL.Field(_type => BookmarkUpdateManyWithoutUsersNestedInput, {
+  @TypeGraphQL.Field(_type => BookmarkUpdateManyWithoutUserNestedInput, {
     nullable: true
   })
-  bookmarks?: BookmarkUpdateManyWithoutUsersNestedInput | undefined;
+  bookmarks?: BookmarkUpdateManyWithoutUserNestedInput | undefined;
 
   @TypeGraphQL.Field(_type => CollectionUpdateManyWithoutUserNestedInput, {
     nullable: true
@@ -65,9 +64,4 @@ export class UserUpdateWithoutTagsInput {
     nullable: true
   })
   externalServices?: ExternalServiceCredentialUpdateManyWithoutUserNestedInput | undefined;
-
-  @TypeGraphQL.Field(_type => BookmarkTagUpdateManyWithoutUserNestedInput, {
-    nullable: true
-  })
-  BookmarkTag?: BookmarkTagUpdateManyWithoutUserNestedInput | undefined;
 }

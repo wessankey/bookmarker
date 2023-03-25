@@ -1,5 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { useFormik } from "formik";
+import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { graphql } from "../../../gql";
 import { BookmarkQueryDocument } from "../../../gql/graphql";
@@ -29,8 +30,12 @@ type TUpsertBookmarkModalProps = {
 };
 
 const UpsertBookmarkMutation = graphql(/* GraphQL */ `
-  mutation UpsertBookmarkMutation($upsertBookmarkInput: UpsertBookmarkInput!) {
-    upsertBookmark(upsertBookmarkInput: $upsertBookmarkInput) {
+  mutation UpsertBookmarkMutation(
+    $where: BookmarkWhereUniqueInput!
+    $create: BookmarkCreateInput!
+    $update: BookmarkUpdateInput!
+  ) {
+    upsertOneBookmark(where: $where, create: $create, update: $update) {
       id
     }
   }
@@ -49,6 +54,8 @@ export const UpsertBookmarkModal = ({
     refetchQueries: [BookmarkQueryDocument],
   });
 
+  const session = useSession();
+
   const handleClose = () => {
     formik.resetForm();
     onClose();
@@ -57,13 +64,29 @@ export const UpsertBookmarkModal = ({
   const handleUpsertBookmark = (values: TUpsertBookmarkForm) => {
     upsertBookmark({
       variables: {
-        upsertBookmarkInput: {
-          id: values.id,
+        where: {
+          id: values.id ?? "-1",
+        },
+        create: {
           title: values.title,
           description: values.description,
           url: values.url,
-          tags: values.tags,
-          collectionId: values.collectionId,
+          tags: {
+            connect: values.tags.map((t) => ({ value: t })),
+          },
+          User: {
+            connect: {
+              id: session.data?.user.id,
+            },
+          },
+        },
+        update: {
+          title: { set: values.title },
+          description: { set: values.description },
+          url: { set: values.url },
+          tags: {
+            connect: values.tags.map((t) => ({ value: t })),
+          },
         },
       },
     }).then(() => {

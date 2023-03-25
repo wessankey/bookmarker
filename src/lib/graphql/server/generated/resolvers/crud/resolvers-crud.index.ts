@@ -1,11 +1,9 @@
 export { AccountCrudResolver } from "./Account/AccountCrudResolver";
 export { BookmarkCrudResolver } from "./Bookmark/BookmarkCrudResolver";
-export { BookmarkTagCrudResolver } from "./BookmarkTag/BookmarkTagCrudResolver";
 export { CollectionCrudResolver } from "./Collection/CollectionCrudResolver";
 export { ExternalServiceCrudResolver } from "./ExternalService/ExternalServiceCrudResolver";
 export { ExternalServiceCredentialCrudResolver } from "./ExternalServiceCredential/ExternalServiceCredentialCrudResolver";
 export { SessionCrudResolver } from "./Session/SessionCrudResolver";
 export { TagCrudResolver } from "./Tag/TagCrudResolver";
 export { UserCrudResolver } from "./User/UserCrudResolver";
-export { UserTagInternalCrudResolver } from "./UserTagInternal/UserTagInternalCrudResolver";
 export { VerificationTokenCrudResolver } from "./VerificationToken/VerificationTokenCrudResolver";

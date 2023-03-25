@@ -4,14 +4,13 @@ import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { AccountListRelationFilter } from "../inputs/AccountListRelationFilter";
 import { BookmarkListRelationFilter } from "../inputs/BookmarkListRelationFilter";
-import { BookmarkTagListRelationFilter } from "../inputs/BookmarkTagListRelationFilter";
 import { CollectionListRelationFilter } from "../inputs/CollectionListRelationFilter";
 import { DateTimeNullableFilter } from "../inputs/DateTimeNullableFilter";
 import { ExternalServiceCredentialListRelationFilter } from "../inputs/ExternalServiceCredentialListRelationFilter";
 import { SessionListRelationFilter } from "../inputs/SessionListRelationFilter";
 import { StringFilter } from "../inputs/StringFilter";
 import { StringNullableFilter } from "../inputs/StringNullableFilter";
-import { UserTagInternalListRelationFilter } from "../inputs/UserTagInternalListRelationFilter";
+import { TagListRelationFilter } from "../inputs/TagListRelationFilter";
 
 @TypeGraphQL.InputType("UserWhereInput", {
   isAbstract: true
@@ -77,18 +76,13 @@ export class UserWhereInput {
   })
   sessions?: SessionListRelationFilter | undefined;
 
-  @TypeGraphQL.Field(_type => UserTagInternalListRelationFilter, {
+  @TypeGraphQL.Field(_type => TagListRelationFilter, {
     nullable: true
   })
-  tags?: UserTagInternalListRelationFilter | undefined;
+  tags?: TagListRelationFilter | undefined;
 
   @TypeGraphQL.Field(_type => ExternalServiceCredentialListRelationFilter, {
     nullable: true
   })
   externalServices?: ExternalServiceCredentialListRelationFilter | undefined;
-
-  @TypeGraphQL.Field(_type => BookmarkTagListRelationFilter, {
-    nullable: true
-  })
-  BookmarkTag?: BookmarkTagListRelationFilter | undefined;
 }

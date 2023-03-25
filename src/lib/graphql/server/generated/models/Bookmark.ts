@@ -2,8 +2,8 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../scalars";
-import { BookmarkTag } from "../models/BookmarkTag";
 import { Collection } from "../models/Collection";
+import { Tag } from "../models/Tag";
 import { User } from "../models/User";
 import { BookmarkCount } from "../resolvers/outputs/BookmarkCount";
 
@@ -31,8 +31,6 @@ export class Bookmark {
   })
   url!: string;
 
-  users?: User[];
-
   @TypeGraphQL.Field(_type => String, {
     nullable: false
   })
@@ -43,9 +41,11 @@ export class Bookmark {
   })
   createdAt!: Date;
 
-  BookmarkTag?: BookmarkTag[];
+  tags?: Tag[];
 
   collections?: Collection[];
+
+  User?: User;
 
   @TypeGraphQL.Field(_type => BookmarkCount, {
     nullable: true

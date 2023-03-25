@@ -16,4 +16,19 @@ export class TagMinAggregate {
     nullable: true
   })
   value!: string | null;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true
+  })
+  userId!: string | null;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true
+  })
+  tagColor!: string | null;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true
+  })
+  bookmarkId!: string | null;
 }

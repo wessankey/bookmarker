@@ -2,11 +2,11 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
-import { BookmarkTagListRelationFilter } from "../inputs/BookmarkTagListRelationFilter";
 import { CollectionListRelationFilter } from "../inputs/CollectionListRelationFilter";
 import { DateTimeFilter } from "../inputs/DateTimeFilter";
 import { StringFilter } from "../inputs/StringFilter";
-import { UserListRelationFilter } from "../inputs/UserListRelationFilter";
+import { TagListRelationFilter } from "../inputs/TagListRelationFilter";
+import { UserRelationFilter } from "../inputs/UserRelationFilter";
 
 @TypeGraphQL.InputType("BookmarkWhereInput", {
   isAbstract: true
@@ -47,11 +47,6 @@ export class BookmarkWhereInput {
   })
   url?: StringFilter | undefined;
 
-  @TypeGraphQL.Field(_type => UserListRelationFilter, {
-    nullable: true
-  })
-  users?: UserListRelationFilter | undefined;
-
   @TypeGraphQL.Field(_type => StringFilter, {
     nullable: true
   })
@@ -62,13 +57,18 @@ export class BookmarkWhereInput {
   })
   createdAt?: DateTimeFilter | undefined;
 
-  @TypeGraphQL.Field(_type => BookmarkTagListRelationFilter, {
+  @TypeGraphQL.Field(_type => TagListRelationFilter, {
     nullable: true
   })
-  BookmarkTag?: BookmarkTagListRelationFilter | undefined;
+  tags?: TagListRelationFilter | undefined;
 
   @TypeGraphQL.Field(_type => CollectionListRelationFilter, {
     nullable: true
   })
   collections?: CollectionListRelationFilter | undefined;
+
+  @TypeGraphQL.Field(_type => UserRelationFilter, {
+    nullable: true
+  })
+  User?: UserRelationFilter | undefined;
 }

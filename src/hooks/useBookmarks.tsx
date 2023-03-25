@@ -8,8 +8,8 @@ import {
 } from "../components/bookmark/UpsertBookmarkModal";
 
 const BookmarkQuery = graphql(/* GraphQL */ `
-  query BookmarkQuery($filter: BookmarkFilter!) {
-    bookmarks(filter: $filter) {
+  query BookmarkQuery($where: BookmarkWhereInput!) {
+    bookmarks(where: $where) {
       id
       title
       description
@@ -23,7 +23,7 @@ const BookmarkQuery = graphql(/* GraphQL */ `
     tags {
       id
       value
-      color
+      tagColor
     }
     user {
       id
@@ -37,8 +37,8 @@ const BookmarkQuery = graphql(/* GraphQL */ `
 `);
 
 const DeleteBookmarkMutation = graphql(/* GraphQL */ `
-  mutation DeleteBookmarkMutation($id: String!) {
-    deleteBookmark(id: $id) {
+  mutation DeleteBookmarkMutation($where: BookmarkWhereUniqueInput!) {
+    deleteOneBookmark(where: $where) {
       id
     }
   }
@@ -76,8 +76,14 @@ export const useBookmarks = () => {
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "network-only",
     variables: {
-      filter: {
-        tag: selectedTag,
+      where: {
+        tags: {
+          some: {
+            value: {
+              equals: selectedTag,
+            },
+          },
+        },
       },
     },
   });
@@ -89,7 +95,7 @@ export const useBookmarks = () => {
       ...l,
       tags: l.tags.map((tag) => ({
         ...tag,
-        color: data.tags.find((t) => t.id === tag.id)?.color || "bg-green",
+        color: data.tags.find((t) => t.id === tag.id)?.tagColor || "bg-green",
       })),
     })) || [];
 
@@ -116,7 +122,7 @@ export const useBookmarks = () => {
   const handleDeleteBookmark = (id: string) => {
     deleteBookmarkMutation({
       variables: {
-        id,
+        where: { id },
       },
     });
   };
@@ -124,8 +130,14 @@ export const useBookmarks = () => {
   const handleTagFilterChange = (tag: string | undefined) => {
     setSelectedTag(tag);
     refetch({
-      filter: {
-        tag,
+      where: {
+        tags: {
+          some: {
+            value: {
+              equals: tag,
+            },
+          },
+        },
       },
     });
   };

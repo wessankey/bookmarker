@@ -3,11 +3,10 @@ import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { AccountCreateNestedManyWithoutUserInput } from "../inputs/AccountCreateNestedManyWithoutUserInput";
-import { BookmarkCreateNestedManyWithoutUsersInput } from "../inputs/BookmarkCreateNestedManyWithoutUsersInput";
-import { BookmarkTagCreateNestedManyWithoutUserInput } from "../inputs/BookmarkTagCreateNestedManyWithoutUserInput";
+import { BookmarkCreateNestedManyWithoutUserInput } from "../inputs/BookmarkCreateNestedManyWithoutUserInput";
 import { ExternalServiceCredentialCreateNestedManyWithoutUserInput } from "../inputs/ExternalServiceCredentialCreateNestedManyWithoutUserInput";
 import { SessionCreateNestedManyWithoutUserInput } from "../inputs/SessionCreateNestedManyWithoutUserInput";
-import { UserTagInternalCreateNestedManyWithoutUserInput } from "../inputs/UserTagInternalCreateNestedManyWithoutUserInput";
+import { TagCreateNestedManyWithoutUserInput } from "../inputs/TagCreateNestedManyWithoutUserInput";
 
 @TypeGraphQL.InputType("UserCreateWithoutCollectionsInput", {
   isAbstract: true
@@ -38,10 +37,10 @@ export class UserCreateWithoutCollectionsInput {
   })
   image?: string | undefined;
 
-  @TypeGraphQL.Field(_type => BookmarkCreateNestedManyWithoutUsersInput, {
+  @TypeGraphQL.Field(_type => BookmarkCreateNestedManyWithoutUserInput, {
     nullable: true
   })
-  bookmarks?: BookmarkCreateNestedManyWithoutUsersInput | undefined;
+  bookmarks?: BookmarkCreateNestedManyWithoutUserInput | undefined;
 
   @TypeGraphQL.Field(_type => AccountCreateNestedManyWithoutUserInput, {
     nullable: true
@@ -53,18 +52,13 @@ export class UserCreateWithoutCollectionsInput {
   })
   sessions?: SessionCreateNestedManyWithoutUserInput | undefined;
 
-  @TypeGraphQL.Field(_type => UserTagInternalCreateNestedManyWithoutUserInput, {
+  @TypeGraphQL.Field(_type => TagCreateNestedManyWithoutUserInput, {
     nullable: true
   })
-  tags?: UserTagInternalCreateNestedManyWithoutUserInput | undefined;
+  tags?: TagCreateNestedManyWithoutUserInput | undefined;
 
   @TypeGraphQL.Field(_type => ExternalServiceCredentialCreateNestedManyWithoutUserInput, {
     nullable: true
   })
   externalServices?: ExternalServiceCredentialCreateNestedManyWithoutUserInput | undefined;
-
-  @TypeGraphQL.Field(_type => BookmarkTagCreateNestedManyWithoutUserInput, {
-    nullable: true
-  })
-  BookmarkTag?: BookmarkTagCreateNestedManyWithoutUserInput | undefined;
 }

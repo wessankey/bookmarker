@@ -20,6 +20,21 @@ export class TagGroupBy {
   })
   value!: string;
 
+  @TypeGraphQL.Field(_type => String, {
+    nullable: false
+  })
+  userId!: string;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: false
+  })
+  tagColor!: string;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true
+  })
+  bookmarkId!: string | null;
+
   @TypeGraphQL.Field(_type => TagCountAggregate, {
     nullable: true
   })

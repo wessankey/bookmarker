@@ -2,7 +2,8 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
-import { UserTagInternalOrderByRelationAggregateInput } from "../inputs/UserTagInternalOrderByRelationAggregateInput";
+import { BookmarkOrderByWithRelationInput } from "../inputs/BookmarkOrderByWithRelationInput";
+import { UserOrderByWithRelationInput } from "../inputs/UserOrderByWithRelationInput";
 import { SortOrder } from "../../enums/SortOrder";
 
 @TypeGraphQL.InputType("TagOrderByWithRelationInput", {
@@ -19,8 +20,28 @@ export class TagOrderByWithRelationInput {
   })
   value?: "asc" | "desc" | undefined;
 
-  @TypeGraphQL.Field(_type => UserTagInternalOrderByRelationAggregateInput, {
+  @TypeGraphQL.Field(_type => SortOrder, {
     nullable: true
   })
-  UserTag?: UserTagInternalOrderByRelationAggregateInput | undefined;
+  userId?: "asc" | "desc" | undefined;
+
+  @TypeGraphQL.Field(_type => SortOrder, {
+    nullable: true
+  })
+  tagColor?: "asc" | "desc" | undefined;
+
+  @TypeGraphQL.Field(_type => UserOrderByWithRelationInput, {
+    nullable: true
+  })
+  User?: UserOrderByWithRelationInput | undefined;
+
+  @TypeGraphQL.Field(_type => BookmarkOrderByWithRelationInput, {
+    nullable: true
+  })
+  Bookmark?: BookmarkOrderByWithRelationInput | undefined;
+
+  @TypeGraphQL.Field(_type => SortOrder, {
+    nullable: true
+  })
+  bookmarkId?: "asc" | "desc" | undefined;
 }

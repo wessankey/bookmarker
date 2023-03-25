@@ -35,5 +35,5 @@ export class FindFirstTagOrThrowArgs {
   @TypeGraphQL.Field(_type => [TagScalarFieldEnum], {
     nullable: true
   })
-  distinct?: Array<"id" | "value"> | undefined;
+  distinct?: Array<"id" | "value" | "userId" | "tagColor" | "bookmarkId"> | undefined;
 }

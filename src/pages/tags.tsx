@@ -13,7 +13,7 @@ const TagQuery = graphql(/* GraphQL */ `
     tags {
       id
       value
-      color
+      tagColor
     }
   }
 `);

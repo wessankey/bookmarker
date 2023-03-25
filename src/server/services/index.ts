@@ -1,15 +1,12 @@
+import { Collection, ExternalServiceType } from "@prisma/client";
 import { Container } from "inversify";
 import {
-  ExternalService,
   Bookmark,
+  ExternalService,
   User,
 } from "../../lib/graphql/server/generated/models";
-import { Collection, ExternalServiceType } from "@prisma/client";
-import { BookmarkCustom } from "../models/BookmarkCustom";
-import { BookmarkService } from "./BookmarkService";
 import { CollectionService } from "./CollectionService";
 import { ExternalServiceService } from "./ExternalServiceService";
-import { TagService } from "./TagService";
 import { UserService } from "./UserService";
 
 export const TYPES = {
@@ -44,44 +41,10 @@ export interface IUserService {
   ): Promise<Boolean>;
 }
 
-export interface IBookmarkFilter {
-  tag?: string;
-  collectionId?: string;
-}
-
-export interface IBookmarkService {
-  getUserBookmarks(
-    userId: string,
-    filter: IBookmarkFilter
-  ): Promise<BookmarkCustom[]>;
-
-  upsertBookmark({
-    id,
-    userId,
-    title,
-    description,
-    url,
-    tags,
-    collectionId,
-  }: {
-    id?: string;
-    userId: string;
-    title: string;
-    description: string;
-    url: string;
-    tags: string[];
-    collectionId?: string;
-  }): Promise<Bookmark>;
-
-  deleteBookmark(id: string): Promise<Bookmark>;
-}
-
 export interface ICollectionService {
-  getCollection(
-    id: string
-  ): Promise<Collection & { bookmarks: BookmarkCustom[] }>;
+  getCollection(id: string): Promise<Collection & { bookmarks: Bookmark[] }>;
 
-  getCollectionBookmarks(id: string): Promise<BookmarkCustom[]>;
+  getCollectionBookmarks(id: string): Promise<Bookmark[]>;
 
   getUserCollections(userId: string): Promise<Collection[]>;
 
@@ -116,24 +79,6 @@ export interface IUserTag {
   color: string;
 }
 
-export interface ITagService {
-  getTags(userId: string): Promise<IUserTag[]>;
-
-  upsertTag({
-    id,
-    name,
-    color,
-    userId,
-  }: {
-    id?: string;
-    name: string;
-    color: string;
-    userId: string;
-  }): Promise<IUserTag>;
-
-  deleteTag(tagId: string, userId: string): Promise<Boolean>;
-}
-
 export interface IExternalServiceService {
   getAllExternalServices(): Promise<ExternalService[]>;
 
@@ -146,18 +91,8 @@ export interface IExternalServiceService {
 
 export const bind = (container: Container) => {
   container
-    .bind<IBookmarkService>(TYPES.IBookmarkService)
-    .to(BookmarkService)
-    .inRequestScope();
-
-  container
     .bind<ICollectionService>(TYPES.ICollectionService)
     .to(CollectionService)
-    .inRequestScope();
-
-  container
-    .bind<ITagService>(TYPES.ITagService)
-    .to(TagService)
     .inRequestScope();
 
   container

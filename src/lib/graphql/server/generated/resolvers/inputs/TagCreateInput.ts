@@ -2,7 +2,8 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
-import { UserTagInternalCreateNestedManyWithoutTagInput } from "../inputs/UserTagInternalCreateNestedManyWithoutTagInput";
+import { BookmarkCreateNestedOneWithoutTagsInput } from "../inputs/BookmarkCreateNestedOneWithoutTagsInput";
+import { UserCreateNestedOneWithoutTagsInput } from "../inputs/UserCreateNestedOneWithoutTagsInput";
 
 @TypeGraphQL.InputType("TagCreateInput", {
   isAbstract: true
@@ -18,8 +19,18 @@ export class TagCreateInput {
   })
   value!: string;
 
-  @TypeGraphQL.Field(_type => UserTagInternalCreateNestedManyWithoutTagInput, {
+  @TypeGraphQL.Field(_type => String, {
+    nullable: false
+  })
+  tagColor!: string;
+
+  @TypeGraphQL.Field(_type => UserCreateNestedOneWithoutTagsInput, {
+    nullable: false
+  })
+  User!: UserCreateNestedOneWithoutTagsInput;
+
+  @TypeGraphQL.Field(_type => BookmarkCreateNestedOneWithoutTagsInput, {
     nullable: true
   })
-  UserTag?: UserTagInternalCreateNestedManyWithoutTagInput | undefined;
+  Bookmark?: BookmarkCreateNestedOneWithoutTagsInput | undefined;
 }

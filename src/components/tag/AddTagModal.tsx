@@ -1,5 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { useFormik } from "formik";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { BlockPicker } from "react-color";
 import { graphql } from "../../../gql";
@@ -19,8 +20,8 @@ type TAddTagModalProps = {
 };
 
 const AddTagMutation = graphql(/* GraphQL */ `
-  mutation AddTagMutation($upsertTagInput: UpsertTagInput!) {
-    upsertTag(upsertTagInput: $upsertTagInput) {
+  mutation AddTagMutation($data: TagCreateInput!) {
+    createOneTag(data: $data) {
       id
     }
   }
@@ -38,12 +39,19 @@ export const AddTagModal: React.FC<TAddTagModalProps> = ({
     refetchQueries: [TagQueryDocument],
   });
 
+  const session = useSession();
+
   const handleAddTag = (values: TAddTagForm) => {
     AddTag({
       variables: {
-        upsertTagInput: {
-          name: values.name,
-          color: values.color,
+        data: {
+          value: values.name,
+          tagColor: values.color,
+          User: {
+            connect: {
+              id: session.data?.user.id,
+            },
+          },
         },
       },
     }).then(() => {

@@ -1,16 +1,17 @@
 import { ApolloServer } from "apollo-server-micro";
-import { DateTime } from "luxon";
 import Cors from "micro-cors";
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { unstable_getServerSession } from "next-auth";
 import "reflect-metadata";
 import { buildSchemaSync } from "type-graphql";
 import {
+  BookmarkCrudResolver,
+  BookmarkRelationsResolver,
   CollectionCrudResolver,
   ExternalServiceCredentialRelationsResolver,
-  BookmarkRelationsResolver,
   TagRelationsResolver,
   UserRelationsResolver,
+  TagCrudResolver,
 } from "../../lib/graphql/server/generated";
 import { container } from "../../server/container";
 import { IContextProvider } from "../../server/context/ContextProvider";
@@ -18,8 +19,6 @@ import { IContextProvider } from "../../server/context/ContextProvider";
 import {
   CollectionRelationsResolver,
   ExternalServiceResolver,
-  BookmarkResolver,
-  TagResolver,
   UserResolver,
 } from "../../server/resolvers";
 import { CustomCollectionResolver } from "../../server/resolvers/CustomCollectionResolver";
@@ -38,10 +37,10 @@ export const config = {
 // @ts-ignore - resolved via Next.js webpack override
 export const schema = buildSchemaSync({
   resolvers: [
-    BookmarkResolver,
+    BookmarkCrudResolver,
     BookmarkRelationsResolver,
     UserResolver,
-    TagResolver,
+    TagCrudResolver,
     CollectionCrudResolver,
     CustomCollectionResolver,
     CollectionRelationsResolver,

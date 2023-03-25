@@ -23,9 +23,8 @@ model User {
   collections      Collection[]
   accounts         Account[]
   sessions         Session[]
-  tags             UserTagInternal[]
+  tags             Tag[]
   externalServices ExternalServiceCredential[]
-  BookmarkTag      BookmarkTag[]
 }
 
 enum Role {
@@ -65,50 +64,30 @@ model ExternalServiceCredential {
 }
 
 model Bookmark {
-  id          String        @id @default(uuid())
+  id          String       @id @default(uuid())
   title       String
   description String
   url         String
-  /// @TypeGraphQL.omit(output: true)
-  users       User[]
   userId      String
-  createdAt   DateTime
-  BookmarkTag BookmarkTag[]
+  createdAt   DateTime     @default(now())
+  tags        Tag[]
   collections Collection[]
+  User        User         @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }
 
 model Tag {
-  id      String            @id @default(uuid())
-  value   String            @unique
-  UserTag UserTagInternal[]
-}
-
-model UserTagInternal {
-  user        User          @relation(fields: [userId], references: [id])
-  userId      String
-  tag         Tag           @relation(fields: [tagId], references: [id])
-  tagId       String
-  tagColor    String
-  BookmarkTag BookmarkTag[]
-
-  @@id([userId, tagId])
-  @@index([userId])
-  @@index([tagId])
-}
-
-model BookmarkTag {
-  bookmarkId String
-  tagId      String
+  id         String    @id @default(uuid())
+  value      String    @unique
   userId     String
-  empty      String?
-  bookmark   Bookmark        @relation(fields: [bookmarkId], references: [id])
-  user       User            @relation(fields: [userId], references: [id])
-  userTag    UserTagInternal @relation(fields: [tagId, userId], references: [tagId, userId])
+  tagColor   String
+  User       User      @relation(fields: [userId], references: [id])
+  Bookmark   Bookmark? @relation(fields: [bookmarkId], references: [id])
+  bookmarkId String?
 
-  @@id([bookmarkId, tagId])
-  @@index([bookmarkId])
   @@index([userId])
-  @@index([tagId, userId])
+  @@index([bookmarkId])
 }
 
 model Collection {
