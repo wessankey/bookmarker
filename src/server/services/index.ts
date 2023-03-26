@@ -1,4 +1,3 @@
-import { Collection, ExternalServiceType } from "@prisma/client";
 import { Container } from "inversify";
 import {
   Bookmark,
@@ -10,9 +9,7 @@ import { ExternalServiceService } from "./ExternalServiceService";
 import { UserService } from "./UserService";
 
 export const TYPES = {
-  IBookmarkService: Symbol.for("IBookmarkService"),
   ICollectionService: Symbol.for("ICollectionService"),
-  ITagService: Symbol.for("ITagService"),
   IUserService: Symbol.for("IUserService"),
   IExternalServiceService: Symbol.for("IExternalServiceService"),
 };

@@ -1,6 +1,5 @@
-import { ApolloServer } from "apollo-server-micro";
-import Cors from "micro-cors";
-import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
+import { ApolloServer } from "@apollo/server";
+import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { unstable_getServerSession } from "next-auth";
 import "reflect-metadata";
 import { buildSchemaSync } from "type-graphql";
@@ -9,11 +8,12 @@ import {
   BookmarkRelationsResolver,
   CollectionCrudResolver,
   ExternalServiceCredentialRelationsResolver,
+  TagCrudResolver,
   TagRelationsResolver,
   UserRelationsResolver,
-  TagCrudResolver,
 } from "../../lib/graphql/server/generated";
 import { container } from "../../server/container";
+import { IContext } from "../../server/context";
 import { IContextProvider } from "../../server/context/ContextProvider";
 
 import {
@@ -24,8 +24,6 @@ import {
 import { CustomCollectionResolver } from "../../server/resolvers/CustomCollectionResolver";
 import { PrismaService } from "../../server/services/PrismaService";
 import { authOptions } from "./auth/[...nextauth]";
-
-const cors = Cors();
 
 // Tells Next.js that we don't want it to parse the request body
 export const config = {
@@ -51,10 +49,10 @@ export const schema = buildSchemaSync({
   ],
 });
 
-const apolloServer = new ApolloServer({
-  schema,
-  context: async ({ req, res }) => {
-    // console.log("LOG_REQ:", req);
+const apolloServer = new ApolloServer<IContext>({ schema });
+
+export default startServerAndCreateNextHandler(apolloServer, {
+  context: async (req, res) => {
     return {
       req,
       res,
@@ -66,27 +64,4 @@ const apolloServer = new ApolloServer({
       prisma: container.get<PrismaService>(PrismaService),
     };
   },
-});
-
-let apolloServerHandler: NextApiHandler;
-
-async function getApolloServerHandler() {
-  if (!apolloServerHandler) {
-    await apolloServer.start();
-
-    apolloServerHandler = apolloServer.createHandler({
-      path: "/api/graphql",
-    });
-  }
-
-  return apolloServerHandler;
-}
-
-export default cors(async (req, res) => {
-  const apolloServerHandler = await getApolloServerHandler();
-  if (req.method === "OPTIONS") {
-    res.end();
-    return;
-  }
-  return apolloServerHandler(req as NextApiRequest, res as NextApiResponse);
 });
